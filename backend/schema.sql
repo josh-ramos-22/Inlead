@@ -11,11 +11,9 @@ create table Players {
     perms      integer,
     profile_img_url url,
 
-    -- TODO add stats
-
     primary key id,
-    constraint valid_pw check len(password) > 6
-};
+    constraint valid_pw check len(password) > 6,
+}
 
 create table Competitions {
     id          serial,

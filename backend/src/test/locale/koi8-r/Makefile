@@ -1,0 +1,1 @@
+/home/joshramos/postgresql-15.1/src/test/locale/koi8-r/Makefile

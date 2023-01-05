@@ -1,0 +1,227 @@
+2023-01-05 16:06:45.263 AEDT [26278] LOG:  starting PostgreSQL 15.1 on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0, 64-bit
+2023-01-05 16:06:45.264 AEDT [26278] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-01-05 16:06:45.268 AEDT [26278] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2023-01-05 16:06:45.273 AEDT [26281] LOG:  database system was shut down at 2023-01-05 16:06:14 AEDT
+2023-01-05 16:06:45.278 AEDT [26278] LOG:  database system is ready to accept connections
+2023-01-05 16:08:32.560 AEDT [26511] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:08:32.560 AEDT [26511] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    -- TODO add stats
+	    primary key id,
+	    constraint valid_pw check len(password) > 6
+	};
+2023-01-05 16:08:32.561 AEDT [26511] ERROR:  syntax error at or near "{" at character 27
+2023-01-05 16:08:32.561 AEDT [26511] STATEMENT:  create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	}
+	create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	}
+	create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	}
+2023-01-05 16:09:02.150 AEDT [26559] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:09:02.150 AEDT [26559] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    -- TODO add stats
+	    primary key id,
+	    constraint valid_pw check len(password) > 6
+	};
+2023-01-05 16:09:02.150 AEDT [26559] ERROR:  syntax error at or near "{" at character 27
+2023-01-05 16:09:02.150 AEDT [26559] STATEMENT:  create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	};
+2023-01-05 16:09:02.150 AEDT [26559] ERROR:  syntax error at or near "{" at character 38
+2023-01-05 16:09:02.150 AEDT [26559] STATEMENT:  create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	};
+2023-01-05 16:09:02.151 AEDT [26559] ERROR:  syntax error at or near "{" at character 29
+2023-01-05 16:09:02.151 AEDT [26559] STATEMENT:  create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	};
+2023-01-05 16:09:14.230 AEDT [26619] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:09:14.230 AEDT [26619] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    -- TODO add stats
+	    primary key id,
+	    constraint valid_pw check len(password) > 6
+	}
+	create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	}
+	create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	}
+	create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	}
+2023-01-05 16:09:30.982 AEDT [26667] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:09:30.982 AEDT [26667] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key id,
+	    constraint valid_pw check len(password) > 6
+	}
+	create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	}
+	create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	}
+	create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	}
+2023-01-05 16:09:43.067 AEDT [26715] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:09:43.067 AEDT [26715] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key id,
+	    constraint valid_pw check len(password) > 6,
+	}
+	create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	}
+	create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	}
+	create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	}

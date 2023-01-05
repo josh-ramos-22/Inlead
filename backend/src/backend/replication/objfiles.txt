@@ -1,0 +1,1 @@
+src/backend/replication/repl_gram.o src/backend/replication/slot.o src/backend/replication/slotfuncs.o src/backend/replication/syncrep.o src/backend/replication/syncrep_gram.o src/backend/replication/walreceiver.o src/backend/replication/walreceiverfuncs.o src/backend/replication/walsender.o
