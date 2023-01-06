@@ -1,1 +1,0 @@
-/home/joshramos/postgresql-15.1/src/test/modules/spgist_name_ops/Makefile

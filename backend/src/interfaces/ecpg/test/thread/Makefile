@@ -1,1 +1,0 @@
-/home/joshramos/postgresql-15.1/src/interfaces/ecpg/test/thread/Makefile

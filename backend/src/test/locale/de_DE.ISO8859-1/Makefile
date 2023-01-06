@@ -1,1 +1,0 @@
-/home/joshramos/postgresql-15.1/src/test/locale/de_DE.ISO8859-1/Makefile

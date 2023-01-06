@@ -1,1 +1,0 @@
-/home/joshramos/postgresql-15.1/contrib/old_snapshot/Makefile
