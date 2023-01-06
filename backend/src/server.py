@@ -36,6 +36,26 @@ CORS(APP)
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
+########################################################################################
+###                              HTTP ENDPOINTS                                     ####
+########################################################################################
+
+### Authorisation endpoints
+
+@APP.route("auth/register/v1", methods=['POST'])
+def auth_register():
+    pass
+
+@APP.route("/auth/login/v1", methods=['POST'])
+def auth_login():
+    pass
+
+@APP.route("/auth/logout/v1", methods=['POST'])
+def auth_logout():
+    pass
+
+
+
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
