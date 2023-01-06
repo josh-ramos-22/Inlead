@@ -225,3 +225,349 @@
 	    foreign key competition references Competitions,
 	    constraint valid_points check points >= 0
 	}
+2023-01-05 16:11:08.803 AEDT [26997] ERROR:  syntax error at or near "{" at character 22
+2023-01-05 16:11:08.803 AEDT [26997] STATEMENT:  create table Players {
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key id,
+	    constraint valid_pw check len(password) > 6,
+	}
+	create table Competitions {
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	}
+	create table CompetitionParticipants {
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	}
+	create table PointsRequests {
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	}
+2023-01-05 16:11:45.284 AEDT [26279] LOG:  checkpoint starting: time
+2023-01-05 16:13:09.031 AEDT [27070] ERROR:  syntax error at or near "id" at character 175
+2023-01-05 16:13:09.031 AEDT [27070] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key id,
+	    constraint valid_pw check len(password) > 6,
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	)
+2023-01-05 16:13:17.902 AEDT [26279] LOG:  checkpoint complete: wrote 926 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=92.563 s, sync=0.042 s, total=92.619 s; sync files=258, longest=0.003 s, average=0.001 s; distance=4245 kB, estimate=4245 kB
+2023-01-05 16:13:21.553 AEDT [27116] ERROR:  syntax error at or near "len" at character 211
+2023-01-05 16:13:21.553 AEDT [27116] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    constraint valid_pw check len(password) > 6,
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check num_games >= 0
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check score >= 0
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check points >= 0
+	)
+2023-01-05 16:14:56.277 AEDT [27191] ERROR:  syntax error at or near ")" at character 234
+2023-01-05 16:14:56.277 AEDT [27191] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    constraint valid_pw check ((len(password) > 6)),
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check ((num_games >= 0))
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check ((score >= 0))
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check ((points >= 0))
+	)
+2023-01-05 16:15:28.531 AEDT [27239] ERROR:  syntax error at or near ")" at character 232
+2023-01-05 16:15:28.531 AEDT [27239] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    constraint valid_pw check (len(password) > 6),
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check ((num_games >= 0))
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check ((score >= 0))
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check ((points >= 0))
+	)
+2023-01-05 16:15:36.879 AEDT [27301] ERROR:  syntax error at or near "len" at character 211
+2023-01-05 16:15:36.879 AEDT [27301] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    constraint valid_pw check len(password) > 6,
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    constraint valid_num_games check ((num_games >= 0))
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_score check ((score >= 0))
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    constraint valid_points check ((points >= 0))
+	)
+2023-01-05 16:16:06.107 AEDT [27352] ERROR:  syntax error at or near ")" at character 232
+2023-01-05 16:16:06.107 AEDT [27352] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    --constraint valid_pw check len(password) > 6,
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    --constraint valid_num_games check ((num_games >= 0))
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    --constraint valid_score check ((score >= 0))
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    --constraint valid_points check ((points >= 0))
+	)
+2023-01-05 16:16:12.415 AEDT [27402] ERROR:  syntax error at or near ")" at character 232
+2023-01-05 16:16:12.415 AEDT [27402] STATEMENT:  create table Players (
+	    id         serial,
+	    handle_str text,
+	    email      text,
+	    password   text,
+	    perms      integer,
+	    profile_img_url url,
+	    primary key (id),
+	    --constraint valid_pw check len(password) > 6,
+	)
+	create table Competitions (
+	    id          serial,
+	    comp_name   text,
+	    is_complete boolean not null,
+	    start_time  timestamp not null,
+	    end_time    timestamp,
+	    num_games   integer,
+	    creator     integer not null,
+	    game_mode   integer,
+	    primary key (id),
+	    foreign key creator references Players,
+	    --constraint valid_num_games check ((num_games >= 0))
+	)
+	create table CompetitionParticipants (
+	    player       integer,
+	    competition  integer,
+	    is_moderator boolean not null,
+	    score        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    --constraint valid_score check ((score >= 0))
+	)
+	create table PointsRequests (
+	    player        integer,
+	    competition   integer,
+	    points        integer
+	    primary key (player, comptetition),
+	    foreign key player references Players,
+	    foreign key competition references Competitions,
+	    --constraint valid_points check ((points >= 0))
+	)
