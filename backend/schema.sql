@@ -54,3 +54,12 @@ create table PointsRequests (
 
     --constraint valid_points check ((points >= 0))
 );
+
+create table Tokens (
+    token text,
+    player integer,
+
+    primary key (token),
+    foreign key (player) references Players
+    
+);
