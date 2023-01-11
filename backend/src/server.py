@@ -15,7 +15,7 @@ import json
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 
-from src import config
+from src import config, auth, other
 
 def quit_gracefully(*args):
     exit(0)
@@ -46,9 +46,12 @@ conn = None
 
 ### Authorisation endpoints
 
-@APP.route("auth/register/v1", methods=['POST'])
+@APP.route("/auth/register/v1", methods=['POST'])
 def auth_register():
-    pass
+    data = request.get_json()
+    ret = auth.register(data['email'], data['password'], data['username'])
+    
+    return json.dumps(ret)
 
 @APP.route("/auth/login/v1", methods=['POST'])
 def auth_login():
@@ -58,6 +61,9 @@ def auth_login():
 def auth_logout():
     pass
 
+@APP.route("/clear/v1", methods=['DELETE'])
+def clear():
+    other.clear()
 
 
 

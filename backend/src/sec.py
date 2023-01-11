@@ -8,9 +8,9 @@
 import uuid
 import time
 import jwt
-from db import database
+from src.db import database
 
-from error import AccessError
+from src.error import AccessError
 
 SECRET = "##M4J0nGIzC0OOL!"
 
@@ -44,8 +44,8 @@ def generate_jwt(auth_user_id):
     
     # store token in database
     with database.get_conn() as conn:
-        with conn.cursor as cur:
-            qry = "INSERT into Tokens(token) VALUES (%s)"
+        with conn.cursor() as cur:
+            qry = "INSERT into Tokens(token) VALUES (%s);"
             cur.execute(qry, (new_jwt,))
             conn.commit()
 

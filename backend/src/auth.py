@@ -4,13 +4,23 @@
 ## January 2023
 ##
 
-import auth_helpers
-import sec 
+from src import auth_helpers, sec
 import hashlib
-from error import InputError, AccessError
-from db import database
+from src.error import InputError, AccessError
+from src.db import database
 
-## Register a new user
+'''
+Register a new user
+
+Parameters
+- email - The email of the user
+- password - the user's selected password
+- username - the username of the new user
+
+Returns
+- token - the session token of the user
+- auth_user_id - the user's assigned user id.
+'''
 def register(email, password, username):
     
     email = email.lower()
@@ -32,6 +42,7 @@ def register(email, password, username):
                 INSERT into Players(handle_str, email, password)
                             VALUES(%s, %s, %s)
                 RETURNING id
+                ;
             """
             qry_params = [username, email, hashlib.sha256(password.encode()).hexdigest()]
             
@@ -43,7 +54,7 @@ def register(email, password, username):
     
     # Generate a session token inserting it to the database
     
-    token = sec.generate_jwt()
+    token = sec.generate_jwt(auth_user_id)
     
     return {
         'token' : token,
