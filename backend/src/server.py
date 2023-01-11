@@ -7,6 +7,7 @@
 ## Some code reused from 2021 implementation of 'UNSW Streams'
 
 import sys
+import psycopg2
 import signal
 import time
 
@@ -35,6 +36,9 @@ CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
+
+global conn
+conn = None
 
 ########################################################################################
 ###                              HTTP ENDPOINTS                                     ####

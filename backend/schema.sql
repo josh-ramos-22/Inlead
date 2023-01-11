@@ -57,9 +57,6 @@ create table PointsRequests (
 
 create table Tokens (
     token text,
-    player integer,
 
     primary key (token),
-    foreign key (player) references Players
-    
 );
