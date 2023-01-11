@@ -61,8 +61,57 @@ def register(email, password, username):
         'auth_user_id' : auth_user_id
     }
 
-def login(db):
-    pass
 
-def logout(db):
-    pass
+'''
+Log in an existing user user
+
+Parameters
+- email - The email of the user
+- password - the user's password
+
+Returns
+- token - the session token of the user
+- auth_user_id - the user's assigned user id.
+'''
+def login(email, password):
+    email = email.lower()
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = """
+                SELECT id, password
+                FROM   Players
+                WHERE  email = %s
+            """
+            qry_params = [email]
+            
+            cur.execute(qry, qry_params)
+            qry_result = cur.fetchone()
+            
+            if not qry_result:
+                raise InputError("We could not verify an account with those credentials.")
+            
+            auth_user_id, stored_password = qry_result
+            
+            if (hashlib.sha256(password.encode()).hexdigest() != stored_password):
+                raise InputError("We could not verify an account with those credentials.")
+            
+    token = sec.generate_jwt(auth_user_id)
+    
+    return {
+        'token' : token,
+        'auth_user_id' : auth_user_id
+    }
+
+def logout(token):
+    if not sec.is_valid_token(token):
+        raise AccessError("Invalid Session Token")
+    
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = "DELETE from Tokens WHERE Token = %s"
+            qry_params = (token,)
+            cur.execute(qry, qry_params)
+            
+            conn.commit()
+            
+            return {}

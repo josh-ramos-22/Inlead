@@ -12,5 +12,5 @@ def clear():
         with conn.cursor() as cur:
             cur.execute("TRUNCATE CompetitionParticipants, Competitions, Players, PointsRequests, Tokens CASCADE;")
         conn.commit()
+        return {}
         
-    return {}

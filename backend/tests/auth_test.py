@@ -67,12 +67,13 @@ def test_simple_login(clear, register_user1):
     expected_user_id = register_user1['auth_user_id']
     
     resp = requests.post(config.url + 'auth/login/v1', 
-                            json = { 'email' : 'email@email.com', 'password' : 'josh is cool'})
+                            json = { 'email' : 'email@email.com', 'password' : 'joshiscool'})
     
+    assert resp.status_code == 200
     assert json.loads(resp.text)['auth_user_id'] == expected_user_id
 
 
-def test_login_fails_after_failed_registration(clear, register_user_1):
+def test_login_fails_after_failed_registration(clear, register_user1):
     resp = requests.post(config.url + 'auth/register/v1',
                             json = user_dict("fakejosh@josh.com", "password", "joshthejosh"))
     
@@ -124,4 +125,4 @@ def test_double_logout_fails(clear, register_user1):
     token = register_user1['token']
     resp = requests.post(config.url +'auth/logout/v1', json = {"token": token})
     
-    assert resp.status_code == 400
+    assert resp.status_code == 403

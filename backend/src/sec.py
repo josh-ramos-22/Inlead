@@ -78,7 +78,7 @@ Arguments:
     ...
 
 Exceptions:
-    InputError - When token is invalid - not associated with any active session
+    AccessError - When token is invalid - not associated with any active session
 
 Return Value:
     Returns u_id
@@ -124,3 +124,22 @@ def get_session_id(token):
     decoded_tok = decode_jwt(token)
 
     return decoded_tok['session_id']
+
+'''
+Given a session token, return true if the token is valid
+
+Arguments
+    token - the user's token
+    
+Return Value:
+    Boolean: true if the passed in token is valid
+'''
+def is_valid_token(token):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = "SELECT token FROM Tokens WHERE token = %s"
+            qry_params = (token,)
+            
+            cur.execute(qry, qry_params)
+            
+            return cur.fetchone() is not None

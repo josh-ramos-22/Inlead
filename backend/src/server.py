@@ -55,15 +55,22 @@ def auth_register():
 
 @APP.route("/auth/login/v1", methods=['POST'])
 def auth_login():
-    pass
+    data = request.get_json()
+    ret = auth.login(data['email'], data['password'])
+    
+    return json.dumps(ret)
 
 @APP.route("/auth/logout/v1", methods=['POST'])
 def auth_logout():
-    pass
+    data = request.get_json()
+    ret = auth.logout(data['token'])
+    
+    return json.dumps(ret)
 
 @APP.route("/clear/v1", methods=['DELETE'])
 def clear():
-    other.clear()
+    ret = other.clear()
+    return json.dumps(ret)
 
 
 
