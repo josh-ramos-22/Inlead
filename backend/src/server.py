@@ -68,6 +68,7 @@ def auth_logout():
     return json.dumps(ret)
 
 ### Competition endpoints
+
 @APP.route("/competition/create/v1", methods=['POST'])
 def competition_create():
     return {}
@@ -93,6 +94,7 @@ def competition_end():
     return {}
 
 ### Helper Endpoints
+
 @APP.route("/clear/v1", methods=['DELETE'])
 def clear():
     ret = other.clear()
