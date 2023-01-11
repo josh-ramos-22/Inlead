@@ -67,6 +67,32 @@ def auth_logout():
     
     return json.dumps(ret)
 
+### Competition endpoints
+@APP.route("/competition/create/v1", methods=['POST'])
+def competition_create():
+    return {}
+    
+@APP.route("/competition/list/v1", methods=['GET'])
+def competition_list():
+    return {}
+    
+@APP.route("/competition/details/v1", methods=['GET'])
+def competition_details():
+    return {}
+
+@APP.route("/competition/leaderboard/v1", methods=['GET'])
+def competition_leaderboard():
+    return {}
+
+@APP.route("/competition/join/v1", methods=['POST'])
+def competition_join():
+    return {}
+
+@APP.route("/competition/end/v1", methods=['POST'])
+def competition_end():
+    return {}
+
+### Helper Endpoints
 @APP.route("/clear/v1", methods=['DELETE'])
 def clear():
     ret = other.clear()
@@ -75,5 +101,5 @@ def clear():
 
 
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, quit_gracefully) # For coverage
-    APP.run(port=config.port) # Do not edit this port
+    signal.signal(signal.SIGINT, quit_gracefully)
+    APP.run(port=config.port)
