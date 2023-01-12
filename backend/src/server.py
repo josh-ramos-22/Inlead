@@ -106,7 +106,10 @@ def competition_leaderboard():
 
 @APP.route("/competition/end/v1", methods=['POST'])
 def competition_end():
-    return {}
+    data = request.get_json()
+    ret = competition.end(data['token'], data['comp_id'])
+    
+    return json.dumps(ret)
 
 ### Helper Endpoints
 

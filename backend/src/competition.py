@@ -145,6 +145,9 @@ Exceptions
         - The user is already part of the competition
         - The comp_id is invalid
     - AccessError if the competition is inactive
+    
+Returns
+    - None
 '''
 @sec.authorise
 def join(auth_user_id, comp_id):
@@ -178,3 +181,62 @@ def join(auth_user_id, comp_id):
             conn.commit()
             
             return {}
+
+'''
+End an active competition
+
+Parameters
+    - auth_user_id - the id of the user wanting to end the competition
+    - comp_id - the competition id
+    
+Exceptions
+    - InputError when
+        - The competition is inactive
+        - The comp_id is invalid
+    - AccessError if the user attempting to end the competition is not a moderator
+    
+Returns
+    - None
+'''
+@sec.authorise
+def end(auth_user_id, comp_id):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = """
+                SELECT cp.is_moderator, c.is_active
+                FROM   CompetitionParticipants cp
+                JOIN   Competitions c on (c.id = cp.competition)
+                WHERE  c.id = %s 
+                AND    cp.player = %s
+                ;
+            """
+            cur.execute(qry, (comp_id, auth_user_id) )
+            result = cur.fetchone()
+            
+            if result is None:
+                cur.execute("SELECT id FROM Competitions WHERE id = %s", (comp_id,))
+                if cur.fetchone() is not None:
+                    raise AccessError("You are not a participant in this Competition")
+                
+                raise InputError("Invalid competition")
+            
+            is_moderator, is_active_comp = result
+            print(result)
+            
+            if not is_moderator:
+                raise AccessError("You must be a moderator to end this competition")
+            elif not is_active_comp:
+                raise InputError("This competition has already ended")
+            
+            qry2 = """
+                UPDATE Competitions
+                SET is_active = %s, end_time = %s
+                WHERE id = %s
+                ;
+            """
+            qry2_params = [False, datetime.datetime.now().isoformat(), comp_id]
+            
+            cur.execute(qry2, qry2_params)
+            
+            conn.commit()
+
