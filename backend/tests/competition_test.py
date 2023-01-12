@@ -164,3 +164,20 @@ def test_double_end_fails(clear, sample_comp1):
     assert resp2.status_code == 400
     
 ## TODO Test that pending points requests are deleted for competitions that have been ended
+
+################################### TESTS FOR COMPETITION LEADERBOARD ##################################
+
+def test_leaderboard_one_participant():
+    pass
+
+def test_leaderboard_first_10():
+    pass
+
+def test_leaderboard_middle_10():
+    pass
+
+def test_leaderboard_last_5():
+    pass
+
+def test_leaderboard_invalid_start():
+    pass
