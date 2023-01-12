@@ -94,3 +94,7 @@ def test_join_invalid_comp(clear, register_user1):
                         json = { 'token' : token, 'comp_id' : comp_id})
     
     assert resp.status_code == 400
+    
+@pytest.mark.skip
+def test_join_inactive_comp_fails():
+    pass

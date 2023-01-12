@@ -8,6 +8,7 @@ from src import sec
 from src.db import database
 from src.error import InputError, AccessError
 import datetime
+import psycopg2
 
 '''
 Given a valid token, create a channel
@@ -131,4 +132,49 @@ def details(auth_user_id, comp_id):
                 'max_points_per_log' : max_points_per_log,
                 'is_points_moderated': is_points_moderated
             }
+
+'''
+Join a competition with the given comp_id
+
+Parameters
+    - auth_user_id - the id of the user wanting to join
+    - comp_id - the competition id
+    
+Exceptions
+    - InputError when
+        - The user is already part of the competition
+        - The comp_id is invalid
+    - AccessError if the competition is inactive
+'''
+@sec.authorise
+def join(auth_user_id, comp_id):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = """
+                SELECT is_active
+                FROM   Competitions
+                WHERE  id = %s
+            """
             
+            cur.execute(qry, (comp_id,))
+            result = cur.fetchone()
+            
+            if result is None:
+                raise InputError("Invalid Channel")
+            elif not result[0]:
+                raise AccessError("This competition has already ended")
+            
+            qry2 = """
+                INSERT INTO CompetitionParticipants(player, competition, is_moderator, score)
+                VALUES (%s, %s, %s, %s);
+            """
+            qry2_params = [auth_user_id, comp_id, False, 0]
+            
+            try:
+                cur.execute(qry2, qry2_params)
+            except psycopg2.errors.UniqueViolation as e:
+                raise InputError("You are already participating in this competition")
+            
+            conn.commit()
+            
+            return {}

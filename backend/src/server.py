@@ -92,13 +92,17 @@ def competition_details():
     
     return json.dumps(ret)
 
+@APP.route("/competition/join/v1", methods=['POST'])
+def competition_join():
+    data = request.get_json()
+    ret = competition.join(data['token'], data['comp_id'])
+    
+    return json.dumps(ret)
+
 @APP.route("/competition/leaderboard/v1", methods=['GET'])
 def competition_leaderboard():
     return {}
 
-@APP.route("/competition/join/v1", methods=['POST'])
-def competition_join():
-    return {}
 
 @APP.route("/competition/end/v1", methods=['POST'])
 def competition_end():
