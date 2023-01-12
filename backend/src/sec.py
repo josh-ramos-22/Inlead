@@ -106,6 +106,19 @@ def get_u_id(token):
 
     return decoded_tok['u_id']
 
+'''
+Decorator function to validate and convert tokens into user ids
+
+'''
+
+def authorise(func):
+    def wrapper(*args, **kwargs):
+        token = args[0]
+        auth_user_id = get_u_id(token)
+        
+        return func([auth_user_id] + args[1:], **kwargs)
+        
+    return wrapper
 
 '''
 Given a session token, return the session_id associated with that token
