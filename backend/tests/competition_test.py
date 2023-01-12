@@ -51,11 +51,12 @@ def test_all_details_correct(clear, sample_comp1):
     assert details['name'] == "Sample Competition"
     assert details['is_active'] == True
     assert details['owner'] == owner_id
-    assert details['max_points_per_game'] == 15
+    assert details['max_points_per_log'] == 15
+    assert details['is_points_moderated'] == True
 
 def test_invalid_channel_id(clear, register_user1):
     resp = requests.get(config.url + 'competition/details/v1', params = { 'token' : register_user1['token'], 'comp_id': -2312})
-    assert resp.status_code == 403
+    assert resp.status_code == 400
 
 def test_non_member_cant_access_details(clear, sample_comp1, register_user2):
     comp_id = sample_comp1['comp_id']

@@ -6,6 +6,7 @@
 
 from src import sec
 from src.db import database
+from src.error import InputError, AccessError
 import datetime
 
 '''
@@ -30,12 +31,12 @@ def create(auth_user_id, name, max_points_per_log, description, is_points_modera
         with conn.cursor() as cur:
             # Create Channel Record
             qry = """
-                INSERT INTO Competitions(name, description, is_active, start_time, num_games, creator, is_points_moderated, max_points_per_log)
+                INSERT INTO Competitions(name, description, is_active, start_time, num_games, owner, is_points_moderated, max_points_per_log)
                 VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 ;
             """
-            qry_params = [name, description, False, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated, max_points_per_log]
+            qry_params = [name, description, True, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated, max_points_per_log]
             cur.execute(qry, qry_params)
             comp_id = cur.fetchone()[0]
             
@@ -72,6 +73,7 @@ def list(auth_user_id):
                 FROM   Competitions c
                 JOIN   CompetitionParticipants cp ON (cp.competition = c.id)
                 WHERE  cp.player = %s
+                ;
             """
             
             cur.execute(qry, (auth_user_id,))
@@ -85,3 +87,48 @@ def list(auth_user_id):
                 ]
             }
 
+'''
+Given a competition id, return basic details about the competition
+
+Parameters
+    - auth_user_id - the id of the user making the request
+    - comp_id - the id of the competition
+    
+Exceptions
+    - InputError - when the given Comp Id is invalid
+    - AccessError - when the user is not a participant in the competition
+'''
+@sec.authorise
+def details(auth_user_id, comp_id):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry = """
+                SELECT c.id, c.name, c.is_active, c.owner, c.max_points_per_log, c.is_points_moderated
+                FROM   Competitions c
+                JOIN   CompetitionParticipants cp ON (c.id = cp.competition)
+                WHERE  c.id = %s
+                AND    cp.player = %s
+            """
+            
+            cur.execute(qry, (comp_id, auth_user_id))
+            
+            result = cur.fetchone()
+            
+            if result is None:
+                cur.execute("SELECT id FROM Competitions WHERE id = %s", (comp_id,))
+                if cur.fetchone() is not None:
+                    raise AccessError("You are not a participant in this Competition")
+                
+                raise InputError("Invalid Competition")
+            
+            comp_id, name, is_active, owner, max_points_per_log, is_points_moderated = result
+            
+            return {
+                'comp_id'            : comp_id,
+                'name'               : name,
+                'is_active'          : is_active,
+                'owner'              : owner,
+                'max_points_per_log' : max_points_per_log,
+                'is_points_moderated': is_points_moderated
+            }
+            

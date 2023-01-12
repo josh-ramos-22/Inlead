@@ -72,7 +72,7 @@ def auth_logout():
 @APP.route("/competition/create/v1", methods=['POST'])
 def competition_create():
     data = request.get_json()
-    ret = competition.create(data['token'], data['name'], data['max_points_per_game'], data['description'], data['is_points_moderated'])
+    ret = competition.create(data['token'], data['name'], data['max_points_per_log'], data['description'], data['is_points_moderated'])
     
     return json.dumps(ret)
     
@@ -85,7 +85,12 @@ def competition_list():
     
 @APP.route("/competition/details/v1", methods=['GET'])
 def competition_details():
-    return {}
+    token = request.args.get('token')
+    comp_id = int(request.args.get('comp_id'))
+    
+    ret = competition.details(token, comp_id)
+    
+    return json.dumps(ret)
 
 @APP.route("/competition/leaderboard/v1", methods=['GET'])
 def competition_leaderboard():

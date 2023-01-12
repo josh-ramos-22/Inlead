@@ -51,7 +51,7 @@ def test_simple_login(clear, register_user1):
     request_body = {
         'token' : json.loads(resp.text)['token'],
         'name'  : "Mahjong World Cup 2023",
-        'max_points_per_game' : 15,
+        'max_points_per_log' : 15,
         'description' : "Winner takes all!",
         'is_points_moderated' : True
     }
@@ -107,7 +107,7 @@ def test_works_after_register(clear, register_user1):
     request_body = {
         'token' : token,
         'name'  : "Mahjong World Cup 2023",
-        'max_points_per_game' : 15,
+        'max_points_per_log' : 15,
         'description' : "Winner takes all!",
         'is_points_moderated' : True
     }

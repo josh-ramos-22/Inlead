@@ -41,7 +41,7 @@ def sample_comp1(register_user1):
     request_body = {
         'token' : token,
         'name'  : "Sample Competition",
-        'max_points_per_game' : 15,
+        'max_points_per_log' : 15,
         'description' : "Winner takes all!",
         'is_points_moderated' : True
     }
@@ -49,5 +49,6 @@ def sample_comp1(register_user1):
     resp = requests.post(config.url + 'competition/create/v1', json = request_body)
     
     ret = json.loads(resp.text)
+    print(ret)
     
     return {'owner_tok': token, 'owner_id': register_user1['auth_user_id'], 'comp_id': ret['comp_id']}
