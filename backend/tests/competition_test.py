@@ -94,7 +94,62 @@ def test_join_invalid_comp(clear, register_user1):
                         json = { 'token' : token, 'comp_id' : comp_id})
     
     assert resp.status_code == 400
+
+
+################################### TESTS FOR COMPETITION END ##################################
+
+def test_end_disables_joining(clear, sample_comp1, register_user2):
+    owner_tok = sample_comp1['owner_tok']
+    joiner_tok = register_user2['token']
     
-@pytest.mark.skip
-def test_join_inactive_comp_fails():
-    pass
+    comp_id = sample_comp1['comp_id']
+    
+    # End the competition
+    resp = requests.post(config.url + 'competition/end/v1',
+                        json = { 'token' : owner_tok, 'comp_id' : comp_id})
+    assert resp.status_code == 200
+    
+    # Try joining the ended competition as user 2; should fail.
+    resp2 = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : joiner_tok, 'comp_id' : comp_id})
+    
+    assert resp2.status_code == 400
+
+def test_non_mod_cant_end_competition(clear, sample_comp1, register_user2):
+    joiner_tok = register_user2['token']
+    
+    comp_id = sample_comp1['comp_id']
+    
+    # Join the comp as user 2
+    resp = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : joiner_tok, 'comp_id' : comp_id})
+    assert resp.status_code == 200
+    
+    # attempt to end the comp as user 2\
+    resp2 = requests.post(config.url + 'competition/end/v1',
+                        json = { 'token' : joiner_tok, 'comp_id' : comp_id})
+    assert resp2.status_code == 403
+
+def test_end_invalid_id(clear, register_user1):
+    owner_tok = register_user1['owner_tok']
+    comp_id = -23
+    
+    # End the competition
+    resp = requests.post(config.url + 'competition/end/v1',
+                        json = { 'token' : owner_tok, 'comp_id' : comp_id})
+    assert resp.status_code == 400
+
+def test_double_end_fails():
+    owner_tok = sample_comp1['owner_tok']
+    
+    comp_id = sample_comp1['comp_id']
+    
+    # End the competition
+    resp = requests.post(config.url + 'competition/end/v1',
+                        json = { 'token' : owner_tok, 'comp_id' : comp_id})
+    assert resp.status_code == 200
+    
+    # Try to end the competition again
+    resp2 = requests.post(config.url + 'competition/end/v1',
+                        json = { 'token' : owner_tok, 'comp_id' : comp_id})
+    assert resp2.status_code == 400
