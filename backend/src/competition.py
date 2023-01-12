@@ -28,13 +28,13 @@ def create(auth_user_id, name, max_points_per_log, description, is_points_modera
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                INSERT INTO Competitions(comp_name, description, is_complete, start_time, num_games, creator, is_points_moderated)
-                VALUES(%s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO Competitions(comp_name, description, is_complete, start_time, num_games, creator, is_points_moderated, max_points_per_log)
+                VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 ;
             """
             
-            qry_params = [name, description, False, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated]
+            qry_params = [name, description, False, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated, max_points_per_log]
             
             cur.execute(qry, qry_params)
             comp_id = cur.fetchone()[0]
