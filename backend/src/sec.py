@@ -91,15 +91,13 @@ def get_u_id(token):
     
     with database.get_conn() as conn:
         with conn.cursor() as cur:
-            qry = """"
-                select token from Tokens where token = %s
-            """
+            qry = "SELECT token FROM Tokens WHERE token = %s;"
             
             qry_params = [token]
             
             cur.execute(qry, qry_params)
             
-            if cur.fetchone() is not None:
+            if cur.fetchone() is None:
                 raise AccessError("Invalid Token")
 
     decoded_tok = decode_jwt(token)
@@ -116,7 +114,8 @@ def authorise(func):
         token = args[0]
         auth_user_id = get_u_id(token)
         
-        return func([auth_user_id] + args[1:], **kwargs)
+        ## FIXME How to convert token into user id?s
+        return func(auth_user_id, *args[1:], **kwargs)
         
     return wrapper
 

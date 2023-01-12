@@ -15,15 +15,16 @@ create table Players (
 );
 
 create table Competitions (
-    id                 integer,
-    comp_name          text,
-    description        text,
-    is_complete        boolean not null,
-    start_time         timestamp not null,
-    end_time           timestamp,
-    num_games          integer,
-    creator            integer not null,
-    max_points_per_log integer,
+    id                  serial,
+    comp_name           text,
+    description         text,
+    is_complete         boolean not null,
+    start_time          timestamp not null,
+    end_time            timestamp,
+    num_games           integer,
+    creator             integer not null,
+    max_points_per_log  integer,
+    is_points_moderated boolean not null,
 
     primary key (id),
     foreign key (creator) references Players

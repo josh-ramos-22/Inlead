@@ -15,7 +15,7 @@ import json
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 
-from src import config, auth, other
+from src import config, auth, other, competition
 
 def quit_gracefully(*args):
     exit(0)
@@ -71,7 +71,10 @@ def auth_logout():
 
 @APP.route("/competition/create/v1", methods=['POST'])
 def competition_create():
-    return {}
+    data = request.get_json()
+    ret = competition.create(data['token'], data['name'], data['max_points_per_game'], data['description'], data['is_points_moderated'])
+    
+    return json.dumps(ret)
     
 @APP.route("/competition/list/v1", methods=['GET'])
 def competition_list():
