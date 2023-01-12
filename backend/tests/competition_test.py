@@ -64,3 +64,33 @@ def test_non_member_cant_access_details(clear, sample_comp1, register_user2):
     
     resp = requests.get(config.url + 'competition/details/v1', params = { 'token' : intruder_tok, 'comp_id': comp_id})
     assert resp.status_code == 403
+    
+
+################################### TESTS FOR COMPETITION JOIN ##################################
+
+def test_simple_join(clear, sample_comp1, register_user2):
+    token = register_user2['token']
+    comp_id = sample_comp1['comp_id']
+    
+    resp = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : token, 'comp_id' : comp_id})
+    
+    assert resp.status_code == 200
+
+def test_double_join_fails(clear, sample_comp1):
+    token = sample_comp1['owner_tok']
+    comp_id = sample_comp1['comp_id']
+    
+    resp = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : token, 'comp_id' : comp_id})
+    
+    assert resp.status_code == 400
+
+def test_join_invalid_comp(clear, register_user1):
+    token = register_user1['token']
+    comp_id = -23213
+    
+    resp = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : token, 'comp_id' : comp_id})
+    
+    assert resp.status_code == 400
