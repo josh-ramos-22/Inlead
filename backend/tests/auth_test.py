@@ -3,33 +3,7 @@ import requests
 import json
 from src import config
 
-@pytest.fixture
-def clear():
-    requests.delete(config.url + 'clear/v1')
-
-################################################ HELPER FUNCTIONS ####################################
-
-# Returns a user_dict containing the parameters of 'auth/register/v1'
-def user_dict(email, password, username):
-    return {
-        'email': email,
-        'password': password,
-        'username' : username
-    }
-    
-@pytest.fixture
-def register_user1():
-    resp1 = requests.post(config.url + 'auth/register/v1', 
-                            json = user_dict("email@email.com", "joshiscool", "joshthejosh"))
-    return json.loads(resp1.text)
-
-@pytest.fixture
-def register_user2():
-    resp2 = requests.post(config.url + 'auth/register/v1', 
-                            json = user_dict("cino@cino.com", "cinoiscool", "cinothedog"))
-    return json.loads(resp2.text)
-
-
+from tests.helpers import user_dict, register_user1, register_user2, clear
 
 ####################################### TESTS FOR AUTH_REGISTER ####################################
 

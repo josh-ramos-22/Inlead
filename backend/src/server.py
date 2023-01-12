@@ -76,9 +76,12 @@ def competition_create():
     
     return json.dumps(ret)
     
-@APP.route("/competition/list/v1", methods=['GET'])
+@APP.route("/competitions/list/v1", methods=['GET'])
 def competition_list():
-    return {}
+    token = request.args.get('token')
+    ret = competition.list(token)
+    
+    return json.dumps(ret)
     
 @APP.route("/competition/details/v1", methods=['GET'])
 def competition_details():
