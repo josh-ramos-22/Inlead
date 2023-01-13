@@ -52,3 +52,22 @@ def sample_comp1(register_user1):
     print(ret)
     
     return {'owner_tok': token, 'owner_id': register_user1['auth_user_id'], 'comp_id': ret['comp_id']}
+
+@pytest.fixture
+def comp_with_30_players(sample_comp1):
+    token = sample_comp1['owner_tok']
+    comp_id = sample_comp1['comp_id']
+    
+    # Create and add 29 users to the comp
+    for i in range(29):
+        resp1 = requests.post(config.url + 'auth/register/v1', 
+                        json = user_dict(f"emai{i}l@email.com", "password", f"sample{i}"))
+        assert resp1.status_code == 200
+        
+        sample_tok = json.loads(resp1.text)['token']
+        
+        resp2 = requests.post(config.url + 'competition/join/v1',
+                        json = { 'token' : sample_tok, 'comp_id' : comp_id})
+        assert resp2.status_code == 200
+
+    return {'owner_tok': token, 'owner_id': sample_comp1['owner_id'], 'comp_id': comp_id}

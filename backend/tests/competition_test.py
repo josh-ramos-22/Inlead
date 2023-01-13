@@ -1,6 +1,6 @@
 ## Tests for Inlead Competition endpoints
 
-from tests.helpers import user_dict, register_user1, register_user2, clear, sample_comp1
+from tests.helpers import user_dict, register_user1, register_user2, clear, sample_comp1, comp_with_30_players
 import pytest
 from src import config
 import json
@@ -167,17 +167,64 @@ def test_double_end_fails(clear, sample_comp1):
 
 ################################### TESTS FOR COMPETITION LEADERBOARD ##################################
 
-def test_leaderboard_one_participant():
-    pass
+def test_leaderboard_one_participant(sample_comp1):
+    token = sample_comp1['owner_tok']
+    comp_id = sample_comp1['comp_id']
+    
+    resp = requests.get(config.url + 'competition/leaderboard/v1',
+                            params = { 'token': token, 'comp_id' : comp_id, 'start' : 0 } )
+    ret = json.loads(resp.text)
+    
+    leaderboard = ret['leaderboard']
+    assert len(leaderboard) == 1
+    assert ret['end'] == -1
+    assert ret['start'] == 0
 
-def test_leaderboard_first_10():
-    pass
+def test_leaderboard_first_10(clear, comp_with_30_players):
+    token = comp_with_30_players['owner_tok']
+    comp_id = comp_with_30_players['comp_id']
+    
+    resp = requests.get(config.url + 'competition/leaderboard/v1',
+                            params = { 'token': token, 'comp_id' : comp_id, 'start' : 0 } )
+    ret = json.loads(resp.text)
+    
+    leaderboard = ret['leaderboard']
+    assert len(leaderboard) == 10
+    assert ret['end'] == 9
+    assert ret['start'] == 0
 
-def test_leaderboard_middle_10():
-    pass
+def test_leaderboard_middle_10(clear, comp_with_30_players):
+    token = comp_with_30_players['owner_tok']
+    comp_id = comp_with_30_players['comp_id']
+    
+    resp = requests.get(config.url + 'competition/leaderboard/v1',
+                            params = { 'token': token, 'comp_id' : comp_id, 'start' : 10 } )
+    ret = json.loads(resp.text)
+    
+    leaderboard = ret['leaderboard']
+    assert len(leaderboard) == 10
+    assert ret['end'] == 19
+    assert ret['start'] == 10
 
-def test_leaderboard_last_5():
-    pass
 
-def test_leaderboard_invalid_start():
-    pass
+def test_leaderboard_last_5(clear, comp_with_30_players):
+    token = comp_with_30_players['owner_tok']
+    comp_id = comp_with_30_players['comp_id']
+    
+    resp = requests.get(config.url + 'competition/leaderboard/v1',
+                            params = { 'token': token, 'comp_id' : comp_id, 'start' : 25 } )
+    ret = json.loads(resp.text)
+    
+    leaderboard = ret['leaderboard']
+    assert len(leaderboard) == 5
+    assert ret['end'] == -1
+    assert ret['start'] == 25
+
+
+def test_leaderboard_invalid_start(clear, comp_with_30_players):
+    token = comp_with_30_players['owner_tok']
+    comp_id = comp_with_30_players['comp_id']
+    
+    resp = requests.get(config.url + 'competition/leaderboard/v1',
+                            params = { 'token': token, 'comp_id' : comp_id, 'start' : 25 } )
+    assert resp.status_code == 400
