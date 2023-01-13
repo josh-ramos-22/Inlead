@@ -240,3 +240,74 @@ def end(auth_user_id, comp_id):
             
             conn.commit()
 
+'''
+Get a competition's leaderboard
+
+Parameters
+    - auth_user_id - the id of the user wanting to end the competition
+    - comp_id - the competition id
+    
+Exceptions
+    - InputError when
+        - The provided start is greater than the total number of participants in the competition
+        - The comp_id is invalid
+    - AccessError if the user attempting to view the leaderboard is not a member
+    
+Returns
+    - leaderboard - a list containing up to 10 participants and their rank
+    - start - the index of the first participant
+    - end - the index of the last participant; is -1 if there are less than 10.
+'''
+@sec.authorise
+def leaderboard(auth_user_id, comp_id, start):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            qry1 = """
+                SELECT player, competition
+                FROM   CompetitionParticipants
+                WHERE  player = %s
+                AND    competition = %s
+            """
+            cur.execute(qry1, (auth_user_id, comp_id))
+            if cur.fetchone() is None:
+                cur.execute("SELECT id FROM Competitions WHERE id = %s", (comp_id,))
+                if cur.fetchone() is not None:
+                    raise AccessError("You are not a participant in this Competition")
+                
+                raise InputError("Invalid competition")
+            
+            
+            qry2 = """
+                SELECT   p.id, p.handle_str, cp.score, cp.is_moderator
+                FROM     Players p
+                JOIN     CompetitionParticipants cp ON (p.id = cp.player)
+                WHERE    cp.competition = %s
+                ORDER BY cp.score DESC
+                LIMIT    10
+                OFFSET   %s
+                ;
+            """
+            qry2_params = (comp_id, start)
+            
+            cur.execute(qry2, qry2_params)
+            
+            ret = [{
+                'u_id'         : u_id,
+                'username'     : username,
+                'score'        : score,
+                'is_moderator' : is_moderator
+            } for u_id, username, score, is_moderator in cur.fetchall()]
+
+            if len(ret) == 0:
+                raise InputError("Start is greater than number of participants")
+            elif len(ret) < 10:
+                end = -1
+            else:
+                end = start + 10
+                
+            return {
+                'leaderboard' : ret,
+                'start'       : start,
+                'end'         : end
+            }
+

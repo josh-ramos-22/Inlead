@@ -101,7 +101,13 @@ def competition_join():
 
 @APP.route("/competition/leaderboard/v1", methods=['GET'])
 def competition_leaderboard():
-    return {}
+    token = request.args.get('token')
+    comp_id = int(request.args.get('comp_id'))
+    start = int(request.args.get('start'))
+    
+    ret = competition.leaderboard(token, comp_id, start)
+    
+    return json.dumps(ret)
 
 
 @APP.route("/competition/end/v1", methods=['POST'])
