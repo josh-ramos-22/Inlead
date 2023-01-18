@@ -11,7 +11,7 @@ import datetime
 import psycopg2
 
 '''
-Given a valid token, create a channel
+Given a valid token, create a competition
 
 @pre: all input is validated
 
