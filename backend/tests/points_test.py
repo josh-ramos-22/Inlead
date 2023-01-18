@@ -101,7 +101,7 @@ def test_points_by_moderator_bypass_requests(clear, moderated_comp1):
 ################################### TESTS FOR POINTS_APPROVE ##################################
 def test_approve_works(clear, moderated_comp1, register_user2):
     token = register_user2['token']
-    owner_tok = moderated_comp1['owner_id']
+    owner_tok = moderated_comp1['owner_tok']
     
     u_id  = register_user2['auth_user_id']
     comp_id = moderated_comp1['comp_id']
@@ -115,7 +115,8 @@ def test_approve_works(clear, moderated_comp1, register_user2):
     assert resp2.status_code == 200
     ret2 = json.loads(resp2.text)
 
-    request_id = ret2['request_id'] != -1
+    request_id = ret2['request_id']
+    print(request_id)
     assert request_id != -1
     
     ## Approve the request
@@ -155,7 +156,7 @@ def test_non_mod_cant_approve(clear, moderated_comp1, register_user2, register_u
     assert resp2.status_code == 200
     ret2 = json.loads(resp2.text)
 
-    request_id = ret2['request_id'] != -1
+    request_id = ret2['request_id']
     assert request_id != -1
     
     ## Try to approve the request
@@ -165,7 +166,7 @@ def test_non_mod_cant_approve(clear, moderated_comp1, register_user2, register_u
 
 
 def test_approve_invalid_request(clear, moderated_comp1):
-    owner_tok = moderated_comp1['owner_id']
+    owner_tok = moderated_comp1['owner_tok']
     
     resp3 = requests.post(config.url + 'points/approve/v1',
                         json = { 'token' : owner_tok, 'request_id' : -12312 } )
@@ -175,7 +176,7 @@ def test_approve_invalid_request(clear, moderated_comp1):
 ################################### TESTS FOR POINTS_REJECT ##################################
 def test_reject_works(clear, moderated_comp1, register_user2):
     token = register_user2['token']
-    owner_tok = moderated_comp1['owner_id']
+    owner_tok = moderated_comp1['owner_tok']
     
     u_id  = register_user2['auth_user_id']
     comp_id = moderated_comp1['comp_id']
@@ -189,7 +190,7 @@ def test_reject_works(clear, moderated_comp1, register_user2):
     assert resp2.status_code == 200
     ret2 = json.loads(resp2.text)
 
-    request_id = ret2['request_id'] != -1
+    request_id = ret2['request_id']
     assert request_id != -1
     
     ## Reject
@@ -227,7 +228,7 @@ def test_non_mod_cant_reject(clear, moderated_comp1, register_user2, register_us
     assert resp2.status_code == 200
     ret2 = json.loads(resp2.text)
 
-    request_id = ret2['request_id'] != -1
+    request_id = ret2['request_id']
     assert request_id != -1
     
     ## Try to reject the request
@@ -236,7 +237,7 @@ def test_non_mod_cant_reject(clear, moderated_comp1, register_user2, register_us
     assert resp3.status_code == 403
 
 def test_reject_invalid_request(clear, moderated_comp1):
-    owner_tok = moderated_comp1['owner_id']
+    owner_tok = moderated_comp1['owner_tok']
     
     resp3 = requests.post(config.url + 'points/reject/v1',
                         json = { 'token' : owner_tok, 'request_id' : -12312 } )

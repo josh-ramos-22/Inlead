@@ -126,6 +126,20 @@ def points_log():
     
     return json.dumps(ret)
 
+@APP.route("/points/approve/v1", methods=['POST'])
+def points_approve():
+    data = request.get_json()
+    ret = points.approve(data['token'], data['request_id'])
+    
+    return json.dumps(ret)
+
+@APP.route("/points/reject/v1", methods=['POST'])
+def points_reject():
+    data = request.get_json()
+    ret = points.reject(data['token'], data['request_id'])
+    
+    return json.dumps(ret)
+
 ### Helper Endpoints
 
 @APP.route("/clear/v1", methods=['DELETE'])
