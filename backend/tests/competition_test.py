@@ -52,7 +52,7 @@ def test_all_details_correct(clear, sample_comp1):
     assert details['is_active'] == True
     assert details['owner'] == owner_id
     assert details['max_points_per_log'] == 15
-    assert details['is_points_moderated'] == True
+    assert details['is_points_moderated'] == False
 
 def test_invalid_channel_id(clear, register_user1):
     resp = requests.get(config.url + 'competition/details/v1', params = { 'token' : register_user1['token'], 'comp_id': -2312})

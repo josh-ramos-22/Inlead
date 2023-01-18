@@ -30,6 +30,13 @@ def register_user2():
                             json = user_dict("cino@cino.com", "cinoiscool", "cinothedog"))
     return json.loads(resp2.text)
 
+# Register a second sample user
+@pytest.fixture
+def register_user3():
+    resp2 = requests.post(config.url + 'auth/register/v1', 
+                            json = user_dict("pico@pico.com", "picoiscool", "picothedog"))
+    return json.loads(resp2.text)
+
 @pytest.fixture
 def clear():
     requests.delete(config.url + 'clear/v1')
@@ -62,7 +69,7 @@ def moderated_comp1(register_user1):
         'name'  : "Moderated Competition",
         'max_points_per_log' : 15,
         'description' : "Points should not instantly appear on leaderboard",
-        'is_points_moderated' : False
+        'is_points_moderated' : True
     }
     
     resp = requests.post(config.url + 'competition/create/v1', json = request_body)
