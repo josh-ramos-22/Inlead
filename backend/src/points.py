@@ -72,8 +72,56 @@ def log(auth_user_id, comp_id, points):
                 'request_id' : request_id
             }
 
-def requests():
-    pass
+
+"""
+Return a list of pending points requests for a given competition
+
+Parameters
+- auth_user_id - id of user making the request
+- comp_id - the competition id
+
+Exceptions
+- InputError - when the competition is invalid
+- AccessError - when the user is not a moderator of the competition
+
+Returns
+- list of requests, which is of the shape (request_id, username, points)
+"""
+def request_list(auth_user_id, comp_id):
+    with database.get_conn() as conn:
+        with conn.cursor() as cur:
+            # verify that the auth user is a mod
+            qry = """
+                SELECT is_moderator 
+                FROM   CompetitionParticipants 
+                WHERE  player = %s
+                AND    competition = %s
+                ;
+            """
+            cur.execute(qry, (auth_user_id, comp_id))
+            
+            res = cur.fetchone()
+            if not res or not res[0]:
+                raise AccessError("You are not a moderator of this competition")
+            
+            qry2 = """
+                SELECT pr.id, p.username, pr.points
+                FROM   PointsRequests pr
+                JOIN   Players p on (pr.player = p.id)
+                WHERE  pr.competition = %s
+                ;
+            """
+            cur.execute(qry2, (comp_id,))
+            
+            return {
+                "requests" : [
+                    {
+                        "request_id" : request_id,
+                        "username" : username,
+                        "points"   : points
+                    } for request_id, username, points in cur.fetchall()
+                ]
+            }
 
 
 '''
