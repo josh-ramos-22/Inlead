@@ -15,7 +15,7 @@ import json
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 
-from src import config, auth, other, competition
+from src import config, auth, other, competition, points
 
 def quit_gracefully(*args):
     exit(0)
@@ -114,6 +114,15 @@ def competition_leaderboard():
 def competition_end():
     data = request.get_json()
     ret = competition.end(data['token'], data['comp_id'])
+    
+    return json.dumps(ret)
+
+
+### Points Endpoints
+@APP.route("/points/log/v1", methods=['POST'])
+def points_log():
+    data = request.get_json()
+    ret = points.log(data['token'], data['comp_id'], data['points'])
     
     return json.dumps(ret)
 

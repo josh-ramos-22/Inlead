@@ -44,15 +44,14 @@ create table CompetitionParticipants (
 );
 
 create table PointsRequests (
+    id            serial,
     player        integer,
     competition   integer,
     points        integer,
 
-    primary key (player, competition),
     foreign key (player) references Players,
     foreign key (competition) references Competitions
 
-    --constraint valid_points check ((points >= 0))
 );
 
 create table Tokens (
