@@ -283,7 +283,7 @@ def test_non_mod_cant_override_points(clear, moderated_comp1, register_user2):
     assert resp1.status_code == 200
     
     resp2 = requests.post(config.url + 'points/override/v1',
-                        json = { 'token' : owner_tok, 'u_id' : u_id, 'comp_id' : comp_id, 'new_points' : 231 })
+                        json = { 'token' : token, 'u_id' : u_id, 'comp_id' : comp_id, 'new_points' : 231 })
     assert resp2.status_code == 403
 
 def test_override_invalid_input(clear, moderated_comp1, register_user2, register_user3):
@@ -311,7 +311,7 @@ def test_override_invalid_input(clear, moderated_comp1, register_user2, register
     
 
 ################################### TESTS FOR POINTS_REQUEST_LIST ##################################
-def test_requests_appear_in_list(clear, moderated_comp1, register_user2, regsiter_user3):
+def test_requests_appear_in_list(clear, moderated_comp1, register_user2):
     token = register_user2['token']
     owner_tok = moderated_comp1['owner_tok']
     

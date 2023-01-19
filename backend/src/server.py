@@ -140,6 +140,22 @@ def points_reject():
     
     return json.dumps(ret)
 
+@APP.route("/points/override/v1", methods=['POST'])
+def points_override():
+    data = request.get_json()
+    ret = points.override(data['token'], data['u_id'], data['comp_id'], data['new_points'])
+
+    return json.dumps(ret)
+
+@APP.route("/points/request_list/v1", methods=['GET'])
+def points_request_list():
+    token = request.args.get('token')
+    comp_id = int(request.args.get('comp_id'))
+    
+    ret = points.request_list(token, comp_id)
+    
+    return json.dumps(ret)
+
 ### Helper Endpoints
 
 @APP.route("/clear/v1", methods=['DELETE'])

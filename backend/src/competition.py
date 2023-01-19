@@ -235,8 +235,15 @@ def end(auth_user_id, comp_id):
                 ;
             """
             qry2_params = [False, datetime.datetime.now().isoformat(), comp_id]
-            
             cur.execute(qry2, qry2_params)
+            
+            # Clear all pending requests in this competition
+            qry3 = """
+                DELETE FROM PointsRequests
+                WHERE       competition = %s
+                ;
+            """
+            cur.execute(qry3, (comp_id,))
             
             conn.commit()
 

@@ -85,7 +85,7 @@ Exceptions
 - AccessError - when the user is not a moderator of the competition
 
 Returns
-- list of requests, which is of the shape (request_id, username, points)
+- list of requests, which is of the shape (request_id, u_id, username, points)
 """
 @sec.authorise
 def request_list(auth_user_id, comp_id):
@@ -108,7 +108,7 @@ def request_list(auth_user_id, comp_id):
                 raise AccessError("You are not a moderator of this competition")
             
             qry2 = """
-                SELECT pr.id, p.id, p.username, pr.points
+                SELECT pr.id, p.id, p.handle_str, pr.points
                 FROM   PointsRequests pr
                 JOIN   Players p on (pr.player = p.id)
                 WHERE  pr.competition = %s
