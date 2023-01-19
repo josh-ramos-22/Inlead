@@ -87,6 +87,7 @@ Exceptions
 Returns
 - list of requests, which is of the shape (request_id, username, points)
 """
+@sec.authorise
 def request_list(auth_user_id, comp_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
@@ -101,11 +102,13 @@ def request_list(auth_user_id, comp_id):
             cur.execute(qry, (auth_user_id, comp_id))
             
             res = cur.fetchone()
-            if not res or not res[0]:
+            if not res:
+                raise InputError("We could not verify that you are a member of this competition")
+            elif not res[0]:
                 raise AccessError("You are not a moderator of this competition")
             
             qry2 = """
-                SELECT pr.id, p.username, pr.points
+                SELECT pr.id, p.id, p.username, pr.points
                 FROM   PointsRequests pr
                 JOIN   Players p on (pr.player = p.id)
                 WHERE  pr.competition = %s
@@ -117,9 +120,10 @@ def request_list(auth_user_id, comp_id):
                 "requests" : [
                     {
                         "request_id" : request_id,
+                        "u_id"     : user_id,
                         "username" : username,
                         "points"   : points
-                    } for request_id, username, points in cur.fetchall()
+                    } for request_id, user_id, username, points in cur.fetchall()
                 ]
             }
 
@@ -252,7 +256,7 @@ def override(auth_user_id, u_id, comp_id, new_points):
             """
             qry_params = (auth_user_id, comp_id)
             
-            cur.execute(qry)
+            cur.execute(qry, qry_params)
             res = cur.fetchone()
             
             if res is None:
