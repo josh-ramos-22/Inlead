@@ -287,7 +287,7 @@ def leaderboard(auth_user_id, comp_id, start):
             
             
             qry2 = """
-                SELECT   p.id, p.handle_str, cp.score, cp.is_moderator
+                SELECT   p.id, p.username, cp.score, cp.is_moderator
                 FROM     Players p
                 JOIN     CompetitionParticipants cp ON (p.id = cp.player)
                 WHERE    cp.competition = %s

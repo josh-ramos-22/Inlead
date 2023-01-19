@@ -39,7 +39,7 @@ def register(email, password, username):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                INSERT into Players(handle_str, email, password)
+                INSERT into Players(username, email, password)
                             VALUES(%s, %s, %s)
                 RETURNING id
                 ;

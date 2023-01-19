@@ -5,7 +5,7 @@
 
 create table Players (
     id         serial,
-    handle_str text,
+    username   text,
     email      text,
     password   text,
     perms      integer,

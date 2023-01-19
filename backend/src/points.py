@@ -108,7 +108,7 @@ def request_list(auth_user_id, comp_id):
                 raise AccessError("You are not a moderator of this competition")
             
             qry2 = """
-                SELECT pr.id, p.id, p.handle_str, pr.points
+                SELECT pr.id, p.id, p.username, pr.points
                 FROM   PointsRequests pr
                 JOIN   Players p on (pr.player = p.id)
                 WHERE  pr.competition = %s

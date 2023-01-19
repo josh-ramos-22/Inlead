@@ -23,7 +23,7 @@ def is_email_in_use(email):
 def is_username_in_use(username):
     with database.get_conn() as db:
         with db.cursor() as cur:
-            qry = "select handle_str from players where handle_str = %s;"
+            qry = "select username from players where username = %s;"
             
             qry_params = [username]
             
