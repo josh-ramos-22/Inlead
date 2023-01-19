@@ -32,12 +32,12 @@ def create(auth_user_id, name, max_points_per_log, description, is_points_modera
         with conn.cursor() as cur:
             # Create Channel Record
             qry = """
-                INSERT INTO Competitions(name, description, is_active, start_time, num_games, owner, is_points_moderated, max_points_per_log)
-                VALUES(%s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO Competitions(name, description, start_time, num_games, owner, is_points_moderated, max_points_per_log)
+                VALUES(%s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 ;
             """
-            qry_params = [name, description, True, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated, max_points_per_log]
+            qry_params = [name, description, datetime.datetime.now().isoformat(), 0, auth_user_id, is_points_moderated, max_points_per_log]
             cur.execute(qry, qry_params)
             comp_id = cur.fetchone()[0]
             
@@ -70,7 +70,7 @@ def list(auth_user_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT c.id, c.name, c.is_active
+                SELECT c.id, c.name, c.end_time
                 FROM   Competitions c
                 JOIN   CompetitionParticipants cp ON (cp.competition = c.id)
                 WHERE  cp.player = %s
@@ -83,8 +83,8 @@ def list(auth_user_id):
                 'competitions' : [  {
                     'comp_id'   : comp_id,
                     'name'      : name,
-                    'is_active' : is_active
-                    } for comp_id, name, is_active in cur.fetchall()
+                    'is_active' : end_time is not None
+                    } for comp_id, name, end_time in cur.fetchall()
                 ]
             }
 
@@ -104,7 +104,7 @@ def details(auth_user_id, comp_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT c.id, c.name, c.is_active, c.owner, c.max_points_per_log, c.is_points_moderated
+                SELECT c.id, c.name, c.start_time, c.end_time, c.owner, c.max_points_per_log, c.is_points_moderated
                 FROM   Competitions c
                 JOIN   CompetitionParticipants cp ON (c.id = cp.competition)
                 WHERE  c.id = %s
@@ -122,12 +122,14 @@ def details(auth_user_id, comp_id):
                 
                 raise InputError("Invalid Competition")
             
-            comp_id, name, is_active, owner, max_points_per_log, is_points_moderated = result
+            comp_id, name, start_time, end_time, owner, max_points_per_log, is_points_moderated = result
             
             return {
                 'comp_id'            : comp_id,
                 'name'               : name,
-                'is_active'          : is_active,
+                'start_time'         : start_time.isoformat(),
+                'end_time'           : None if not end_time else end_time.isoformat(),
+                'is_active'          : end_time is None,
                 'owner'              : owner,
                 'max_points_per_log' : max_points_per_log,
                 'is_points_moderated': is_points_moderated
@@ -154,7 +156,7 @@ def join(auth_user_id, comp_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT is_active
+                SELECT end_time
                 FROM   Competitions
                 WHERE  id = %s
             """
@@ -164,7 +166,7 @@ def join(auth_user_id, comp_id):
             
             if result is None:
                 raise InputError("Invalid Channel")
-            elif not result[0]:
+            elif result[0] is not None:
                 raise AccessError("This competition has already ended")
             
             qry2 = """
@@ -203,7 +205,7 @@ def end(auth_user_id, comp_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT cp.is_moderator, c.is_active
+                SELECT cp.is_moderator, c.end_time
                 FROM   CompetitionParticipants cp
                 JOIN   Competitions c on (c.id = cp.competition)
                 WHERE  c.id = %s 
@@ -220,21 +222,21 @@ def end(auth_user_id, comp_id):
                 
                 raise InputError("Invalid competition")
             
-            is_moderator, is_active_comp = result
+            is_moderator, end_time = result
             print(result)
             
             if not is_moderator:
                 raise AccessError("You must be a moderator to end this competition")
-            elif not is_active_comp:
+            elif end_time is not None:
                 raise InputError("This competition has already ended")
             
             qry2 = """
                 UPDATE Competitions
-                SET is_active = %s, end_time = %s
+                SET end_time = %s
                 WHERE id = %s
                 ;
             """
-            qry2_params = [False, datetime.datetime.now().isoformat(), comp_id]
+            qry2_params = [datetime.datetime.now().isoformat(), comp_id]
             cur.execute(qry2, qry2_params)
             
             # Clear all pending requests in this competition

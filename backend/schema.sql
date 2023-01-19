@@ -18,7 +18,6 @@ create table Competitions (
     id                  serial,
     comp_name           text,
     description         text,
-    is_complete         boolean not null,
     start_time          timestamp not null,
     end_time            timestamp,
     num_games           integer,
