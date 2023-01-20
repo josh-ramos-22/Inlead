@@ -8,6 +8,32 @@ import Button from "@mui/material/Button";
 import { Link } from 'react-router-dom';
 import AppEntryBox from "../components/AppEntryBox";
 
+import ValidatedTextField from "../components/ValidatedTextField";
+
+import {
+  Formik,
+  Field,
+  Form,
+  useField,
+  FieldAttributes,
+  FieldArray
+} from "formik";
+
+import * as yup from "yup";
+
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required("Please enter your email")
+    .email('Invalid Email'),
+  username: yup
+    .string()
+    .required("Please enter your username"),
+  password: yup
+    .string()
+    .required('Please enter your password')
+})
+
 function LoginPage() {
   const [backendError, setBackendError] = React.useState(null);
 
@@ -17,7 +43,7 @@ function LoginPage() {
       <Logo/>
       <Typography component="h1" variant="h5">Log In</Typography>
 
-      <Box component="form"
+      <Box
         sx = {{
           my: 2,
           mx: 2,
@@ -26,34 +52,33 @@ function LoginPage() {
           alignItems: 'center'
         }}
       >
-        <TextField
-          margin="normal"
-          required
-          // fullWidth
-          id="email"
-          label="Email"
-        />
-
-        <TextField
-          margin="normal"
-          required
-          // fullWidth
-          id="username"
-          label="Username"
-        />
-
-        <TextField
-          margin="normal"
-          required
-          // fullWidth
-          id="password"
-          label="Password"
-          type="password"
-        />
-
+        <Formik
+          validateOnChange={true}
+          initialValues = {{
+            email: "",
+            username: "",
+            password: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(data, { setSubmitting }) => {
+            setSubmitting(true); // prevents submissions during async call
+            // make async call
+            console.log("submit: ", data);
+            setSubmitting(false);
+          }}
+        >
+          {({ values, errors, isSubmitting }) => (
+            <Form>
+              <ValidatedTextField placeholder="Email" name="email" />
+              <ValidatedTextField placeholder="Username" name="username" />
+              <ValidatedTextField placeholder="Password" type="password" name="password" />
+              <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                <Button fullWidth sx={{m: 1, mb: 1}} variant="contained" type="submit" disabled={isSubmitting}>Login</Button>
+              </Box>
+            </Form>
+          )}
+        </Formik>
       </Box>
-
-      <Button sx={{m: 1, mb: 1}} variant="contained">Submit</Button>
 
       <Typography sx= {{ fontSize: '10pt', m: 1}}>Need an Account? <Link to="/register">Register here</Link></Typography>
     </AppEntryBox>
