@@ -8,14 +8,14 @@ import Button from "@mui/material/Button";
 import { Link } from 'react-router-dom';
 import AppEntryBox from "../components/AppEntryBox";
 
-function RegisterPage() {
+function LoginPage() {
   const [backendError, setBackendError] = React.useState(null);
 
   return (
     <AppEntryBox>
 
       <Logo/>
-      <Typography component="h1" variant="h5">Create an Account</Typography>
+      <Typography component="h1" variant="h5">Log In</Typography>
 
       <Box component="form"
         sx = {{
@@ -51,21 +51,13 @@ function RegisterPage() {
           type="password"
         />
 
-        <TextField
-          margin="normal"
-          required
-          // fullWidth
-          id="password-confirm"
-          label="Confirm Password"
-          type="password"
-        />
       </Box>
 
       <Button sx={{m: 1, mb: 1}} variant="contained">Submit</Button>
 
-      <Typography sx= {{ fontSize: '10pt', m: 1}}>Already have an account? <Link to="/login">Log in here</Link></Typography>
+      <Typography sx= {{ fontSize: '10pt', m: 1}}>Need an Account? <Link to="/register">Register here</Link></Typography>
     </AppEntryBox>
   )
 }
 
-export default RegisterPage;
+export default LoginPage;
