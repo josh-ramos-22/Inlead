@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material/';
 
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import JoinPage from './pages/JoinPage';
 
 const theme = createTheme({
   breakpoints: {
@@ -44,6 +45,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<RegisterPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/" element={<JoinPage/>}/>
         </Routes>
       </ThemeProvider>
     </Context.Provider>

@@ -3,20 +3,19 @@ import React from "react";
 import Logo from "../components/Logo";
 import { Box } from "@mui/material";
 import { Typography } from "@mui/material";
-import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AppEntryBox from "../components/AppEntryBox";
 import ValidatedTextField from "../components/ValidatedTextField";
 
+import { BACKEND_URL } from '../helpers/config';
+import { useContext, Context } from '../context';
+import ErrorMessageBox from "../components/ErrorMessageBox";
+
 import {
   Formik,
-  Field,
   Form,
-  useField,
-  FieldAttributes,
-  FieldArray
 } from "formik";
 
 import * as yup from "yup";
@@ -31,7 +30,7 @@ const validationSchema = yup.object({
     .matches(/^[A-Za-z_0-9]+$/, 'Username can only contain numbers, letters and underscores')
     .required("Please enter a username")
     .min(3, 'Username is too short - should be 3 characters minimum')
-    .max(10, 'Username is too long - should be at most 10 characters'),
+    .max(20, 'Username is too long - should be at most 20 characters'),
   password: yup
     .string()
     .required('Please enter your password')
@@ -45,14 +44,55 @@ const validationSchema = yup.object({
       .oneOf([yup.ref('password'), null], "Passwords must match")
 })
 
+type inputData = {
+  email: string;
+  username: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 const RegisterPage : React.FC = () => {
-  const [backendError, setBackendError] = React.useState(null);
+  const [backendError, setBackendError] = React.useState("");
+  const navigate = useNavigate();
+
+  const context = useContext(Context);
+  const setters = context.setters;
+
+  const doRegister = async (data : inputData) => {
+    const response = await fetch(
+      `${BACKEND_URL}/auth/register/v1`, {
+        method: 'POST',
+        headers: {
+          'Content-type' : 'application/json'
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          username: data.username
+        })
+      }
+    );
+
+    const res = await response.json();
+    if (response.status !== 200) {
+      setBackendError(res.message);
+    } else {
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('auth_user_id', res.auth_user_id);
+      setters?.setToken ?.(res.token);
+      setters?.setUID?.(res.auth_user_id);
+      navigate('/');
+    }
+  }
 
   return (
     <AppEntryBox>
+      
 
       <Logo/>
       <Typography component="h1" variant="h5">Create an Account</Typography>
+
+      <ErrorMessageBox message={backendError}/>
 
       <Box
         sx = {{
@@ -73,9 +113,9 @@ const RegisterPage : React.FC = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={(data, { setSubmitting }) => {
+            setBackendError("")
             setSubmitting(true); // prevents submissions during async call
-            // make async call
-            console.log("submit: ", data);
+            doRegister(data);
             setSubmitting(false);
           }}
         >
