@@ -4,6 +4,28 @@ import './App.css';
 
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Context, initialValue } from './context';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material/';
+
+import RegisterPage from './pages/RegisterPage';
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 500,
+      md: 1400,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+  palette: {
+    background: {
+      default: "darkred"
+    }
+  }
+})
+
 
 function App() {
   const [token, setToken] = React.useState(initialValue.token);
@@ -16,9 +38,12 @@ function App() {
 
   return (
     <Context.Provider value={{ getters, setters }}>
-      <Routes>
-        <Route path="/register" element={<div>Register Page</div>}/>
-      </Routes>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <Routes>
+          <Route path="/register" element={<RegisterPage/>}/>
+        </Routes>
+      </ThemeProvider>
     </Context.Provider>
   );
 }
