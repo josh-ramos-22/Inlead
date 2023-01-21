@@ -14,6 +14,7 @@ import { IosShare } from "@mui/icons-material";
 
 import PrivateRoutes from "./helpers/PrivateRoutes";
 import AuthRoutes from "./helpers/AuthRoutes";
+import { red } from "@mui/material/colors";
 
 const theme = createTheme({
   breakpoints: {
@@ -27,9 +28,13 @@ const theme = createTheme({
   },
   palette: {
     background: {
-      default: "darkred"
+      default: "white"
+    },
+    primary: {
+      main: red[700]
     }
-  }
+  },
+
 });
 
 
