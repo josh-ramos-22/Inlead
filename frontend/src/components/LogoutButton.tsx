@@ -2,10 +2,11 @@ import React from "react";
 
 
 import IconButton from "@mui/material/Button";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Typography } from "@mui/material";
 
-import { BACKEND_URL } from '../helpers/config';
-import { useContext, Context } from '../context';
+import { BACKEND_URL } from "../helpers/config";
+import { useContext, Context } from "../context";
 import { useNavigate } from "react-router";
 
 const LogoutButton : React.FC = () => {
@@ -15,9 +16,9 @@ const LogoutButton : React.FC = () => {
   const doLogout = async () => {
     const response = await fetch(
       `${BACKEND_URL}/auth/logout/v1`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type' : 'application/json'
+          "Content-type" : "application/json"
         },
         body: JSON.stringify({
           token: getters.token
@@ -29,18 +30,21 @@ const LogoutButton : React.FC = () => {
     if (response.status !== 200) {
       alert(res.message);
     } else {
-      localStorage.setItem('token', '')
-      setters?.setToken ?.('');
+      localStorage.setItem("token", "");
+      setters?.setToken ?.("");
       setters?.setUID?.(-1);
-      navigate('/login');
+      navigate("/login");
     }
-  }
+  };
 
   return (
-    <IconButton onClick={() => doLogout()}>
+    <IconButton onClick={() => doLogout()} sx={{ color: "white" }}>
       <LogoutIcon/>
+      <Typography sx={{ m: 1 }}>
+        Logout
+      </Typography>
     </IconButton>
-  )
-}
+  );
+};
 
 export default LogoutButton;

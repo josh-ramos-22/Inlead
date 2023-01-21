@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import { 
   Drawer,
@@ -14,11 +14,13 @@ import {
   Toolbar,
   ListItemText,
   CssBaseline
-} from '@mui/material';
+} from "@mui/material";
 
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import Logo from "./Logo";
+import LogoutButton from "./LogoutButton";
 
 const drawerWidth = 240;
 
@@ -36,10 +38,13 @@ const Sidebar = (props : Props)  => {
 
   const drawer = (
     <Box>
-      <Toolbar />
+      {/* <Toolbar /> */}
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Logo/>
+      </Box>
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {["Join Game", "Create Game"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -52,7 +57,7 @@ const Sidebar = (props : Props)  => {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {["Recent Games", "Completed Games"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -69,7 +74,7 @@ const Sidebar = (props : Props)  => {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -78,25 +83,40 @@ const Sidebar = (props : Props)  => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexGrow: 1,
+              justifyContent: "flex-end"
+            }}
+          >
+            <LogoutButton/>
+          </Box>
+          {/* <Typography variant="h6" noWrap component="div">
+            Responsive drawer!!
+          </Typography> */}
+
         </Toolbar>
       </AppBar>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }}}
+        aria-label="Menu Options"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
@@ -108,8 +128,9 @@ const Sidebar = (props : Props)  => {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+            bgcolor: "pallete.primary.dark"
           }}
         >
           {drawer}
@@ -117,8 +138,8 @@ const Sidebar = (props : Props)  => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
           }}
           open
         >
@@ -127,4 +148,6 @@ const Sidebar = (props : Props)  => {
       </Box>
     </Box>
   );
-}
+};
+
+export default Sidebar;
