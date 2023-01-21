@@ -1,15 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { Context, initialValue } from './context';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material/';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { Context, initialValue } from "./context";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material/";
 
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import JoinPage from './pages/JoinPage';
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import JoinPage from "./pages/JoinPage";
+import { IosShare } from "@mui/icons-material";
+
+import PrivateRoutes from "./helpers/PrivateRoutes";
+import AuthRoutes from "./helpers/AuthRoutes";
 
 const theme = createTheme({
   breakpoints: {
@@ -26,7 +30,7 @@ const theme = createTheme({
       default: "darkred"
     }
   }
-})
+});
 
 
 function App() {
@@ -43,9 +47,13 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <Routes>
-          <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/" element={<JoinPage/>}/>
+          <Route element={<AuthRoutes/>}>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+          </Route>
+          <Route element={<PrivateRoutes/>}>
+            <Route path="/" element={<JoinPage/>}/>
+          </Route>
         </Routes>
       </ThemeProvider>
     </Context.Provider>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface IContext {
 	getters : {
@@ -12,10 +12,13 @@ interface IContext {
 	}
 }
 
+const initToken = localStorage.getItem("token");
+const initUID = localStorage.getItem("auth_user_id");
+
 export const initialValue = {
-	token: '',
-	authUserId: -1
-}
+  token: initToken !== null ? initToken : "",
+  authUserId: initUID !== null ? JSON.parse(initUID) : -1
+};
 
 export const Context = React.createContext<IContext>({ getters: initialValue });
 export const useContext = React.useContext;
