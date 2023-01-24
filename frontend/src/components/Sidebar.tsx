@@ -16,9 +16,14 @@ import {
   CssBaseline
 } from "@mui/material";
 
+import { useNavigate } from "react-router-dom";
+
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import HistoryIcon from "@mui/icons-material/History";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CreateIcon from "@mui/icons-material/Create";
 import Logo from "./Logo";
 import LogoutButton from "./LogoutButton";
 
@@ -32,6 +37,8 @@ const Sidebar = (props : Props)  => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const navigate = useNavigate();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -44,29 +51,46 @@ const Sidebar = (props : Props)  => {
       </Box>
       <Divider />
       <List>
-        {["Join Game", "Create Game"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+
+        <ListItem key="join-link" disablePadding>
+          <ListItemButton onClick={() => navigate("/")}>
+            <ListItemIcon>
+              <AddCircleOutlineIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Join Game" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem key="create-link" disablePadding>
+          <ListItemButton onClick={() => navigate("/competitions/create")}>
+            <ListItemIcon>
+              <CreateIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Create Game" />
+          </ListItemButton>
+        </ListItem>
+
+
       </List>
       <Divider />
       <List>
-        {["Recent Games", "Completed Games"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem key="recent-link" disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <LibraryBooksIcon/>
+            </ListItemIcon>
+            <ListItemText primary="All Games" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem key="completed-link" disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <HistoryIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Completed Games" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
