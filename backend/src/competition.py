@@ -165,7 +165,7 @@ def join(auth_user_id, comp_id):
             result = cur.fetchone()
             
             if result is None:
-                raise InputError("Invalid Channel")
+                raise InputError("Invalid Competition")
             elif result[0] is not None:
                 raise AccessError("This competition has already ended")
             
