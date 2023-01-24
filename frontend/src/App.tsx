@@ -10,6 +10,7 @@ import { CssBaseline } from "@mui/material/";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import JoinPage from "./pages/JoinPage";
+import CompetitionCreatePage from "./pages/CompetitionCreatePage";
 import { IosShare } from "@mui/icons-material";
 
 import PrivateRoutes from "./helpers/PrivateRoutes";
@@ -58,6 +59,7 @@ function App() {
           </Route>
           <Route element={<PrivateRoutes/>}>
             <Route path="/" element={<JoinPage/>}/>
+            <Route path="/competitions/create" element={<CompetitionCreatePage/>}/>
           </Route>
         </Routes>
       </ThemeProvider>
