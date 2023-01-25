@@ -84,7 +84,7 @@ def list(auth_user_id):
                     'comp_id'   : comp_id,
                     'name'      : name,
                     'is_active' : end_time is not None,
-                    'start_time' : start_time
+                    'start_time' : start_time.isoformat()
                     } for comp_id, name, end_time, start_time in cur.fetchall()
                 ]
             }

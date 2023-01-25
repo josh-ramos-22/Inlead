@@ -75,7 +75,7 @@ const Sidebar = (props : Props)  => {
       <Divider />
       <List>
         <ListItem key="recent-link" disablePadding>
-          <ListItemButton onClick={() => navigate("competitions/list/all")}>
+          <ListItemButton onClick={() => navigate("/competitions/list/all")}>
             <ListItemIcon>
               <LibraryBooksIcon/>
             </ListItemIcon>

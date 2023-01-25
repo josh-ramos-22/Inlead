@@ -1,11 +1,84 @@
 import React from "react";
+import { 
+  Box,
+  Typography 
+} from "@mui/material";
+
+import {
+  useContext,
+  Context
+} from "../context";
+
+
+import FormattedPage from "../components/FormattedPage";
+import { BACKEND_URL } from "../helpers/config";
+import ErrorMessageBox from "../components/ErrorMessageBox";
+import CompetitionLink from "../components/CompetitionLink";
+
+type reqParams = {
+  token: string
+}
+
+type compResp = {
+  comp_id: number,
+  name: string,
+  is_active: boolean,
+  start_time: string,
+}
 
 const CompetitionListAllPage = () => {
+  const context = useContext(Context);
+  const getters = context.getters;
+
+  const [backendError, setBackendError] = React.useState("");
+
+  const [comps, setComps] = React.useState<compResp[]>([]);
+
+  const fetchCompetitions = async () => {
+    const params : reqParams = {
+      token: getters.token
+    };
+    const response = await fetch(
+      `${BACKEND_URL}/competitions/list/v1?` + ( new URLSearchParams(params) ), {
+        method: "GET",
+        headers: {
+          "Content-type" : "application/json"
+        }
+      }
+    );
+  
+    const res = await response.json();
+    if (response.status !== 200) {
+      setBackendError(res.message);
+    } else {
+      setComps(res.competitions);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchCompetitions();
+  }, []);
 
   return (
-    <div>
-      Here are all of your competitions!
-    </div>
+    <FormattedPage>
+      <Typography variant="h4">
+        Your Competitions
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          m: 1
+        }}
+      >
+        {
+          comps.map(comp => <CompetitionLink key={comp.comp_id} comp={comp}/>)
+        }
+      </Box>
+
+      <ErrorMessageBox message={backendError}/>
+    </FormattedPage>
   );
 };
 
