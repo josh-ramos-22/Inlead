@@ -44,7 +44,7 @@ type inputData = {
   name: string,
   description: string,
   maxPointsPerGame: number,
-  isPointsModerated: boolean
+  isPointsModerated: boolean,
 }
 
 const CompetitionCreatePage = () => {
@@ -64,7 +64,8 @@ const CompetitionCreatePage = () => {
           token: getters.token,
           name: data.name,
           description: data.description,
-          is_points_moderated: data.isPointsModerated
+          is_points_moderated: data.isPointsModerated,
+          max_points_per_log: data.maxPointsPerGame
         })
       }
     );

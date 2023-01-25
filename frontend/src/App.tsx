@@ -16,6 +16,7 @@ import { IosShare } from "@mui/icons-material";
 import PrivateRoutes from "./helpers/PrivateRoutes";
 import AuthRoutes from "./helpers/AuthRoutes";
 import { red } from "@mui/material/colors";
+import CompetitionPage from "./pages/CompetitionPage";
 
 const theme = createTheme({
   breakpoints: {
@@ -60,6 +61,7 @@ function App() {
           <Route element={<PrivateRoutes/>}>
             <Route path="/" element={<JoinPage/>}/>
             <Route path="/competitions/create" element={<CompetitionCreatePage/>}/>
+            <Route path="/competition/:compId" element={<CompetitionPage/>}/>
           </Route>
         </Routes>
       </ThemeProvider>
