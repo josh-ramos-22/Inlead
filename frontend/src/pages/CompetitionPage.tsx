@@ -2,6 +2,7 @@
 import React from "react";
 import FormattedPage from "../components/FormattedPage";
 import { 
+  Box,
   Typography 
 } from "@mui/material";
 
@@ -9,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { BACKEND_URL } from "../helpers/config";
 import { useContext, Context } from "../context";
 import prettyPrintDate from "../helpers/datehelpers";
+import LoadingScreen from "../components/LoadingScreen";
 
 type detailParams = {
   comp_id : string,
@@ -21,6 +23,8 @@ const CompetitionPage = () => {
   const getters = context.getters;
 
   const [backendError, setBackendError] = React.useState("");
+
+  const [isDetailsLoaded, setDetailsLoaded] = React.useState(false);
 
   const [description, setDescription] = React.useState("");
   const [name, setName] = React.useState("");
@@ -54,6 +58,7 @@ const CompetitionPage = () => {
       setMaxPointsPerLog(res.maxPointsPerLog);
       setActive(res.is_active);
     }
+    setDetailsLoaded(true);
   };
 
   React.useEffect(() => {
@@ -62,17 +67,36 @@ const CompetitionPage = () => {
 
   return (
     <FormattedPage>
-      <Typography variant="h4">
-        {name}
-      </Typography>
+      <Box
+        sx= {{
+          height: "100%",
+          width: "100%"
+        }}
+      >
+        {
+          isDetailsLoaded ?
+            (
+              <Box>
+                <Typography variant="h4">
+                  {name}
+                </Typography>
 
-      <Typography>
-        {description}
-      </Typography>
+                <Typography>
+                  {description}
+                </Typography>
 
-      <Typography>
-        Created {startTime}.
-      </Typography>
+                <Typography>
+                  Created {startTime}.
+                </Typography>
+              </Box>
+            )
+            :
+            (
+              <LoadingScreen/>
+            )
+        }
+      </Box>
+
     </FormattedPage>
   );
 };

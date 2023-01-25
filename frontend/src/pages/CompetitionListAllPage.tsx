@@ -14,6 +14,7 @@ import FormattedPage from "../components/FormattedPage";
 import { BACKEND_URL } from "../helpers/config";
 import ErrorMessageBox from "../components/ErrorMessageBox";
 import CompetitionLink from "../components/CompetitionLink";
+import LoadingScreen from "../components/LoadingScreen";
 
 type reqParams = {
   token: string
@@ -29,6 +30,8 @@ type compResp = {
 const CompetitionListAllPage = () => {
   const context = useContext(Context);
   const getters = context.getters;
+
+  const [isLoaded, setLoaded] = React.useState(false);
 
   const [backendError, setBackendError] = React.useState("");
 
@@ -53,6 +56,8 @@ const CompetitionListAllPage = () => {
     } else {
       setComps(res.competitions);
     }
+
+    setLoaded(true);
   };
 
   React.useEffect(() => {
@@ -72,9 +77,13 @@ const CompetitionListAllPage = () => {
           m: 1
         }}
       >
-        {
-          comps.map(comp => <CompetitionLink key={comp.comp_id} comp={comp}/>)
+        {isLoaded ?
+          ( comps.map(comp => <CompetitionLink key={comp.comp_id} comp={comp}/>) )
+          :
+          ( <LoadingScreen/> )
         }
+
+        
       </Box>
 
       <ErrorMessageBox message={backendError}/>
