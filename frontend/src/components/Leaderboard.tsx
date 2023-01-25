@@ -113,9 +113,16 @@ const Leaderboard = ( props: leaderboardProps ) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Typography sx={{ m: 1 }}>
-        Last Refreshed {refreshTime}
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end"
+        }}
+      >
+        <Typography sx={{ m: 1 }}>
+          Last Refreshed: {refreshTime}
+        </Typography>
+      </Box>
     </Box>
     
   );

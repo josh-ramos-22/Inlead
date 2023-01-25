@@ -80,7 +80,7 @@ const LogPointsModal = ( props: modalProps ) => {
 
   return (
     <Box>
-      <Button onClick={handleClickOpen}>
+      <Button onClick={handleClickOpen} variant="contained" sx={{ m: 1 }}>
         Log Points
       </Button>
       <Dialog open={open} onClose={handleClose}>
