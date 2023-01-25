@@ -28,9 +28,11 @@ import { useNavigate } from "react-router-dom";
 const validationSchema = yup.object({
   name: yup
     .string()
-    .required("Please enter a competition name"),
+    .required("Please enter a competition name")
+    .max(20, "Name must be 20 characters or less"),
   description: yup
-    .string(),
+    .string()
+    .max(250, "Description must be 250 characters or less"),
   maxPointsPerGame: yup
     .number()
     .min(1, "Minimum points per game is 1")
@@ -106,9 +108,23 @@ const CompetitionCreatePage = () => {
           >
             {({ values, errors, isSubmitting }) => (
               <Form>
-                <ValidatedTextField placeholder="Competition Name" name="name" />
-                <ValidatedTextArea placeholder="Description" name="description" />
-                <ValidatedTextField placeholder="Maximum Points Per Game" type="number" name="maxPointsPerGame" />
+                <Box
+                  sx={{
+                    mr: 1,
+                    display: "inline" 
+                  }}
+                >
+                  <ValidatedTextField placeholder="Competition Name" name="name"/>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "inline" 
+                  }}
+                >
+                  <ValidatedTextField placeholder="Maximum Points Per Game" type="number" name="maxPointsPerGame" />
+                </Box>
+                <ValidatedTextArea placeholder="Description (Optional)" name="description" />
                 <ValidatedSwitch
                   name="isPointsModerated"
                   label="Points Approval Required?"
