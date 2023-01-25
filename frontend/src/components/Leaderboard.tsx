@@ -75,7 +75,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="leaderboard">
+      <Table sx={{ minWidth: 350 }} aria-label="leaderboard">
         <TableHead>
           <TableRow>
             <TableCell>Rank</TableCell>
