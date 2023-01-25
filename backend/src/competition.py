@@ -70,7 +70,7 @@ def list(auth_user_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT c.id, c.name, c.end_time
+                SELECT c.id, c.name, c.end_time, c.start_time
                 FROM   Competitions c
                 JOIN   CompetitionParticipants cp ON (cp.competition = c.id)
                 WHERE  cp.player = %s
@@ -83,8 +83,9 @@ def list(auth_user_id):
                 'competitions' : [  {
                     'comp_id'   : comp_id,
                     'name'      : name,
-                    'is_active' : end_time is not None
-                    } for comp_id, name, end_time in cur.fetchall()
+                    'is_active' : end_time is not None,
+                    'start_time' : start_time
+                    } for comp_id, name, end_time, start_time in cur.fetchall()
                 ]
             }
 
