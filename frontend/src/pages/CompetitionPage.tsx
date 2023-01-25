@@ -11,6 +11,7 @@ import { BACKEND_URL } from "../helpers/config";
 import { useContext, Context } from "../context";
 import prettyPrintDate from "../helpers/datehelpers";
 import LoadingScreen from "../components/LoadingScreen";
+import JoinCompBox from "../components/JoinCompBox";
 
 type detailParams = {
   comp_id : string,
@@ -76,18 +77,32 @@ const CompetitionPage = () => {
         {
           isDetailsLoaded ?
             (
-              <Box>
-                <Typography variant="h4">
-                  {name}
-                </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent:"space-between"
+                }}
+              >
+                <Box>
+                  <Typography variant="h4">
+                    {name}
+                  </Typography>
 
-                <Typography>
-                  {description}
-                </Typography>
+                  <Typography>
+                    {description}
+                  </Typography>
 
-                <Typography>
-                  Created {startTime}.
-                </Typography>
+                  <Typography>
+                    Created {startTime}.
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: { xs: "none", sm: "block" }
+                  }}
+                >
+                  <JoinCompBox compId={Number(compId)}/>
+                </Box>
               </Box>
             )
             :
