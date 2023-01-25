@@ -20,6 +20,10 @@ import ValidatedSwitch from "../components/ValidatedSwitch";
 
 import FormattedPage from "../components/FormattedPage";
 import ValidatedTextArea from "../components/ValidatedTextArea";
+import ErrorMessageBox from "../components/ErrorMessageBox";
+import { BACKEND_URL } from "../helpers/config";
+import { Context, useContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
   name: yup
@@ -36,10 +40,42 @@ const validationSchema = yup.object({
     .required()
 });
 
+type inputData = {
+  name: string,
+  description: string,
+  maxPointsPerGame: number,
+  isPointsModerated: boolean
+}
+
 const CompetitionCreatePage = () => {
   const [backendError, setBackendError] = React.useState("");
+  const context = useContext(Context);
+  const navigate = useNavigate();
+  const getters = context.getters;
 
+  const doCreateCompetition = async (data: inputData) => {
+    const response = await fetch(
+      `${BACKEND_URL}/competition/create/v1`, {
+        method: "POST",
+        headers: {
+          "Content-type" : "application/json"
+        },
+        body: JSON.stringify({
+          token: getters.token,
+          name: data.name,
+          description: data.description,
+          is_points_moderated: data.isPointsModerated
+        })
+      }
+    );
 
+    const res = await response.json();
+    if (response.status !== 200) {
+      setBackendError(res.message);
+    } else {
+      navigate(`/competition/${res.comp_id}`);
+    }
+  };
 
   return (
     <Box>
@@ -48,6 +84,8 @@ const CompetitionCreatePage = () => {
           <Typography component="h4" variant="h4">
             Create a Competition
           </Typography>
+
+          <ErrorMessageBox message={backendError}/>
 
           <Formik
             validateOnChange={true}
@@ -61,6 +99,7 @@ const CompetitionCreatePage = () => {
             onSubmit={(data, { setSubmitting }) => {
               setBackendError("");
               setSubmitting(true); // prevents submissions during async call
+              doCreateCompetition(data);
               setSubmitting(false);
             }}
           >
@@ -72,7 +111,7 @@ const CompetitionCreatePage = () => {
                 <ValidatedSwitch
                   name="isPointsModerated"
                   label="Points Approval Required?"
-                  helperText="Points will need to be approved before appearing on the leaderboard with this setting enabled."
+                  helperText="Points will need to be approved by a moderator before appearing on the leaderboard with this setting enabled."
                 />
                 <Box sx={{display: "flex", justifyContent: "center"}}>
                   <Button fullWidth sx={{m: 1, mb: 1}} variant="contained" type="submit" disabled={isSubmitting}>Create</Button>
