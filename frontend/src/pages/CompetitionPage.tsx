@@ -12,6 +12,7 @@ import { useContext, Context } from "../context";
 import prettyPrintDate from "../helpers/datehelpers";
 import LoadingScreen from "../components/LoadingScreen";
 import JoinCompBox from "../components/JoinCompBox";
+import Leaderboard from "../components/Leaderboard";
 
 type detailParams = {
   comp_id : string,
@@ -110,6 +111,8 @@ const CompetitionPage = () => {
               <LoadingScreen/>
             )
         }
+        <Leaderboard compId={Number(compId)}/>
+
       </Box>
 
     </FormattedPage>
