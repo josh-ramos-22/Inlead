@@ -8,7 +8,7 @@ import {
   TextField 
 } from "@mui/material";
 
-const ValidatedTextField : React.FC<FieldAttributes<object>> = ({
+const ValidatedTextArea : React.FC<FieldAttributes<object>> = ({
   placeholder,
   type,
   ...props
@@ -20,15 +20,16 @@ const ValidatedTextField : React.FC<FieldAttributes<object>> = ({
     <TextField
       placeholder={placeholder}
       margin="normal"
-      required
       label={placeholder}
       {...field}
       helperText={errorText}
       error={!!errorText}
       type={type}
       fullWidth
+      multiline
+      rows={4}
     />
   );
 };
 
-export default ValidatedTextField;
+export default ValidatedTextArea;
