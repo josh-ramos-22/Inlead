@@ -103,7 +103,7 @@ const JoinPage : React.FC = () => {
             >
               {({ values, errors, isSubmitting }) => (
                 <Form>
-                  <ValidatedTextField placeholder="Competition Code" name="competitioncode" type="number"/>
+                  <ValidatedTextField placeholder="Competition Code" name="code" type="number"/>
                   <Box sx={{display: "flex", justifyContent: "center"}}>
                     <Button sx={{m: 1, mb: 1}} variant="contained" type="submit" disabled={isSubmitting}>Join</Button>
                   </Box>
