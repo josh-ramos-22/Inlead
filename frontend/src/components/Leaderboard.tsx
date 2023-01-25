@@ -8,13 +8,15 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Box
+  Box,
+  Typography
 } from "@mui/material";
 
 import LoadingScreen from "./LoadingScreen";
 
 import { Context, useContext } from "../context";
 import { BACKEND_URL } from "../helpers/config";
+import prettyPrintDate from "../helpers/datehelpers";
 
 type leaderboardProps = {
   compId: number
@@ -39,6 +41,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
   const [backendError, setBackendError] = React.useState("");
   const [start, setStart] = React.useState(0);
   const [end, setEnd] = React.useState(-1);
+  const [refreshTime, setRefreshTime] = React.useState("");
 
   const context = useContext(Context);
   const getters = context.getters;
@@ -63,6 +66,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
       setBackendError(res.message);
     } else {
       setParticipants(res.leaderboard);
+      setRefreshTime(prettyPrintDate((new Date()).toISOString()));
     }
 
     setLoaded(true);
@@ -72,34 +76,48 @@ const Leaderboard = ( props: leaderboardProps ) => {
     fetchLeaderboard();
   }, []);
   
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      fetchLeaderboard();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 350 }} aria-label="leaderboard">
-        <TableHead>
-          <TableRow>
-            <TableCell>Rank</TableCell>
-            <TableCell>Player</TableCell>
-            <TableCell>Score</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {participants.map((p, i) => (
-            <TableRow
-              key={p.u_id}
-              sx={{ 
-                "&:last-child td, &:last-child th": { border: 0 }, 
-                fontSize: "15pt" 
-              }}
-            >
-              <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{i + 1}</TableCell>
-              <TableCell sx={{ fontSize: "inherit" }}>{p.username}</TableCell>
-              <TableCell sx={{ fontSize: "inherit" }}>{p.score}</TableCell>
+    <Box>
+      
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 350 }} aria-label="leaderboard">
+          <TableHead>
+            <TableRow>
+              <TableCell>Rank</TableCell>
+              <TableCell>Player</TableCell>
+              <TableCell>Score</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {participants.map((p, i) => (
+              <TableRow
+                key={p.u_id}
+                sx={{ 
+                  "&:last-child td, &:last-child th": { border: 0 }, 
+                  fontSize: "15pt" 
+                }}
+              >
+                <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{i + 1}</TableCell>
+                <TableCell sx={{ fontSize: "inherit" }}>{p.username}</TableCell>
+                <TableCell sx={{ fontSize: "inherit" }}>{p.score}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Typography sx={{ m: 1 }}>
+        Last Refreshed {refreshTime}
+      </Typography>
+    </Box>
+    
   );
 };
 
