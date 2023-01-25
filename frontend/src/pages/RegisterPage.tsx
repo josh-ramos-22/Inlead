@@ -4,13 +4,13 @@ import Logo from "../components/Logo";
 import { Box } from "@mui/material";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 import AppEntryBox from "../components/AppEntryBox";
 import ValidatedTextField from "../components/ValidatedTextField";
 
-import { BACKEND_URL } from '../helpers/config';
-import { useContext, Context } from '../context';
+import { BACKEND_URL } from "../helpers/config";
+import { useContext, Context } from "../context";
 import ErrorMessageBox from "../components/ErrorMessageBox";
 
 import {
@@ -24,25 +24,25 @@ const validationSchema = yup.object({
   email: yup
     .string()
     .required("Please enter your email")
-    .email('Invalid Email'),
+    .email("Invalid Email"),
   username: yup
     .string()
-    .matches(/^[A-Za-z_0-9]+$/, 'Username can only contain numbers, letters and underscores')
+    .matches(/^[A-Za-z_0-9]+$/, "Username can only contain numbers, letters and underscores")
     .required("Please enter a username")
-    .min(3, 'Username is too short - should be 3 characters minimum')
-    .max(20, 'Username is too long - should be at most 20 characters'),
+    .min(3, "Username is too short - should be 3 characters minimum")
+    .max(20, "Username is too long - should be at most 20 characters"),
   password: yup
     .string()
-    .required('Please enter your password')
+    .required("Please enter your password")
     .matches(
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One special case Character"
     ),
   passwordConfirm: yup
-      .string()
-      .required("Please confirm your password")
-      .oneOf([yup.ref('password'), null], "Passwords must match")
-})
+    .string()
+    .required("Please confirm your password")
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+});
 
 type inputData = {
   email: string;
@@ -61,9 +61,9 @@ const RegisterPage : React.FC = () => {
   const doRegister = async (data : inputData) => {
     const response = await fetch(
       `${BACKEND_URL}/auth/register/v1`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type' : 'application/json'
+          "Content-type" : "application/json"
         },
         body: JSON.stringify({
           email: data.email,
@@ -77,13 +77,13 @@ const RegisterPage : React.FC = () => {
     if (response.status !== 200) {
       setBackendError(res.message);
     } else {
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('auth_user_id', res.auth_user_id);
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("auth_user_id", res.auth_user_id);
       setters?.setToken ?.(res.token);
       setters?.setUID?.(res.auth_user_id);
-      navigate('/');
+      navigate("/");
     }
-  }
+  };
 
   return (
     <AppEntryBox>
@@ -98,9 +98,9 @@ const RegisterPage : React.FC = () => {
         sx = {{
           my: 2,
           mx: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
         }}
       >
         <Formik
@@ -113,7 +113,7 @@ const RegisterPage : React.FC = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={(data, { setSubmitting }) => {
-            setBackendError("")
+            setBackendError("");
             setSubmitting(true); // prevents submissions during async call
             doRegister(data);
             setSubmitting(false);
@@ -121,11 +121,11 @@ const RegisterPage : React.FC = () => {
         >
           {({ values, errors, isSubmitting }) => (
             <Form>
-              <ValidatedTextField placeholder="Email" name="email" />
-              <ValidatedTextField placeholder="Username" name="username" />
-              <ValidatedTextField placeholder="Password" type="password" name="password" />
-              <ValidatedTextField placeholder="Confirm Password" type="password" name="passwordConfirm" />
-              <Box sx={{display: 'flex', justifyContent: 'center'}}>
+              <ValidatedTextField placeholder="Email" name="email" fullWidth={true}/>
+              <ValidatedTextField placeholder="Username" name="username" fullWidth={true}/>
+              <ValidatedTextField placeholder="Password" type="password" name="password" fullWidth={true} />
+              <ValidatedTextField placeholder="Confirm Password" type="password" name="passwordConfirm" fullWidth={true} />
+              <Box sx={{display: "flex", justifyContent: "center"}}>
                 <Button fullWidth sx={{m: 1, mb: 1}} variant="contained" type="submit" disabled={isSubmitting}>Submit</Button>
               </Box>
             </Form>
@@ -134,9 +134,9 @@ const RegisterPage : React.FC = () => {
       </Box>
 
 
-      <Typography sx= {{ fontSize: '10pt', m: 1}}>Already have an account? <Link to="/login">Log in here</Link></Typography>
+      <Typography sx= {{ fontSize: "10pt", m: 1}}>Already have an account? <Link to="/login">Log in here</Link></Typography>
     </AppEntryBox>
-  )
-}
+  );
+};
 
 export default RegisterPage;

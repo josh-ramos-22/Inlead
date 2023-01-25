@@ -4,13 +4,13 @@ import Logo from "../components/Logo";
 import { Box } from "@mui/material";
 import { Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import AppEntryBox from "../components/AppEntryBox";
 
 import ValidatedTextField from "../components/ValidatedTextField";
 
-import { BACKEND_URL } from '../helpers/config';
-import { useContext, Context } from '../context';
+import { BACKEND_URL } from "../helpers/config";
+import { useContext, Context } from "../context";
 import ErrorMessageBox from "../components/ErrorMessageBox";
 import { useNavigate } from "react-router-dom";
 
@@ -30,11 +30,11 @@ const validationSchema = yup.object({
   email: yup
     .string()
     .required("Please enter your email")
-    .email('Invalid Email'),
+    .email("Invalid Email"),
   password: yup
     .string()
-    .required('Please enter your password')
-})
+    .required("Please enter your password")
+});
 
 function LoginPage() {
   const [backendError, setBackendError] = React.useState("");
@@ -47,9 +47,9 @@ function LoginPage() {
   const doRegister = async (data : inputData) => {
     const response = await fetch(
       `${BACKEND_URL}/auth/login/v1`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type' : 'application/json'
+          "Content-type" : "application/json"
         },
         body: JSON.stringify({
           email: data.email,
@@ -62,13 +62,13 @@ function LoginPage() {
     if (response.status !== 200) {
       setBackendError(res.message);
     } else {
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('auth_user_id', res.auth_user_id);
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("auth_user_id", res.auth_user_id);
       setters?.setToken ?.(res.token);
       setters?.setUID?.(res.auth_user_id);
-      navigate('/');
+      navigate("/");
     }
-  }
+  };
 
   return (
     <AppEntryBox>
@@ -81,9 +81,9 @@ function LoginPage() {
         sx = {{
           my: 2,
           mx: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
         }}
       >
         <Formik
@@ -101,9 +101,9 @@ function LoginPage() {
         >
           {({ values, errors, isSubmitting }) => (
             <Form>
-              <ValidatedTextField placeholder="Email" name="email" />
-              <ValidatedTextField placeholder="Password" type="password" name="password" />
-              <Box sx={{display: 'flex', justifyContent: 'center'}}>
+              <ValidatedTextField placeholder="Email" name="email" fullWidth={true}/>
+              <ValidatedTextField placeholder="Password" type="password" name="password" fullWidth={true} />
+              <Box sx={{display: "flex", justifyContent: "center"}}>
                 <Button fullWidth sx={{m: 1, mb: 1}} variant="contained" type="submit" disabled={isSubmitting}>Login</Button>
               </Box>
             </Form>
@@ -111,9 +111,9 @@ function LoginPage() {
         </Formik>
       </Box>
 
-      <Typography sx= {{ fontSize: '10pt', m: 1}}>Need an Account? <Link to="/register">Register here</Link></Typography>
+      <Typography sx= {{ fontSize: "10pt", m: 1}}>Need an Account? <Link to="/register">Register here</Link></Typography>
     </AppEntryBox>
-  )
+  );
 }
 
 export default LoginPage;

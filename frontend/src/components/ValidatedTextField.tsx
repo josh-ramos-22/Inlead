@@ -8,9 +8,12 @@ import {
   TextField 
 } from "@mui/material";
 
-const ValidatedTextField : React.FC<FieldAttributes<object>> = ({
+type TextFieldProps = { fullWidth?: boolean } & FieldAttributes<object>;
+
+const ValidatedTextField : React.FC<TextFieldProps> = ({
   placeholder,
   type,
+  fullWidth=false,
   ...props
 }) => {
   const [field, meta] = useField<object>(props);
@@ -26,7 +29,7 @@ const ValidatedTextField : React.FC<FieldAttributes<object>> = ({
       helperText={errorText}
       error={!!errorText}
       type={type}
-      fullWidth
+      fullWidth={fullWidth}
     />
   );
 };
