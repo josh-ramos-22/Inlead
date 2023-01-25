@@ -76,7 +76,7 @@ const LogPointsModal = ( props: modalProps ) => {
     } else {
       handleClose();
     }
-  }
+  };
 
   return (
     <Box>
@@ -104,7 +104,9 @@ const LogPointsModal = ( props: modalProps ) => {
 
               <DialogContent>
                 <ErrorMessageBox message={backendError}/>
-
+                <DialogContentText>
+                  Max points loggable: {props.maxPointsPerLog}
+                </DialogContentText>
                 { props.isPointsModerated && 
                   <DialogContentText>
                     Points will require moderator approval before appearing on the leaderboard
@@ -124,6 +126,6 @@ const LogPointsModal = ( props: modalProps ) => {
       </Dialog>
     </Box>
   );
-}
+};
 
 export default LogPointsModal;

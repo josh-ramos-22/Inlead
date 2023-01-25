@@ -13,6 +13,7 @@ import prettyPrintDate from "../helpers/datehelpers";
 import LoadingScreen from "../components/LoadingScreen";
 import JoinCompBox from "../components/JoinCompBox";
 import Leaderboard from "../components/Leaderboard";
+import LogPointsModal from "../components/LogPointsModal";
 
 type detailParams = {
   comp_id : string,
@@ -34,6 +35,7 @@ const CompetitionPage = () => {
   const [endTime, setEndTime] = React.useState("");
   const [maxPointsPerLog, setMaxPointsPerLog] = React.useState(1);
   const [isActive, setActive] = React.useState(true);
+  const [isPointsModerated, setIsPointsModerated] = React.useState(false);
 
   const fetchDetails = async () => {
     const params : detailParams = {
@@ -57,8 +59,9 @@ const CompetitionPage = () => {
       setDescription(res.description);
       setStartTime(prettyPrintDate(res.start_time));
       setEndTime(res.end_time);
-      setMaxPointsPerLog(res.maxPointsPerLog);
+      setMaxPointsPerLog(res.max_points_per_log);
       setActive(res.is_active);
+      setIsPointsModerated(res.is_points_moderated);
     }
     setDetailsLoaded(true);
   };
@@ -96,6 +99,8 @@ const CompetitionPage = () => {
                   <Typography>
                     Created {startTime}.
                   </Typography>
+
+                  <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated}/>
                 </Box>
                 <Box
                   sx={{
