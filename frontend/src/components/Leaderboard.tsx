@@ -76,8 +76,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
       const pos = (res.leaderboard as Participant[]).findIndex(p => 
       {return p.u_id == getters.authUserId;} 
       ) + 1;
-        
-      console.log(pos, res.leaderboard, getters.authUserId);
+
       setScore(res.leaderboard[pos - 1].score);
       setParticipants(res.leaderboard);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
@@ -145,16 +144,32 @@ const Leaderboard = ( props: leaderboardProps ) => {
   );
 
   return (
-    <Box>
+    <Box
+      sx={{
+        m: 2
+      }}
+    >
       <Box sx={{
         display: { xs: "none", sm: "block" }
       }}>
         {fullLeaderboard}
       </Box>
       <Box sx={{
-        display: { xs: "block", sm: "none" }
+        display: { xs: "flex", sm: "none" },
+        justifyContent: "center",
+        textAlign: "center",
+        flexDirection: "column",
+        alignItems: "center",
       }}>
-        You are in {position}{getOrdinal(position)} place with {score} points
+        <Typography variant="h5">
+          You are in
+        </Typography>
+        <Typography variant="h1">
+          {position}{getOrdinal(position)}
+        </Typography>
+        <Typography variant="h5">
+          place with {score} points
+        </Typography>
       </Box>
     </Box>
   );
