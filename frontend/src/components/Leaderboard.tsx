@@ -10,7 +10,8 @@ import {
   Paper,
   Box,
   Typography,
-  Fade
+  Fade,
+  Button
 } from "@mui/material";
 
 import LoadingScreen from "./LoadingScreen";
@@ -91,6 +92,10 @@ const Leaderboard = ( props: leaderboardProps ) => {
   React.useEffect(() => {
     fetchLeaderboard();
   }, []);
+
+  React.useEffect(() => {
+    fetchLeaderboard();
+  }, [isLoaded]);
   
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -99,6 +104,12 @@ const Leaderboard = ( props: leaderboardProps ) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const refreshBtn = (
+    <Button size="small" onClick={() => setLoaded(false)}>
+      Refresh
+    </Button>
+  );
 
   const fullLeaderboard = (
     <Box>
@@ -131,9 +142,10 @@ const Leaderboard = ( props: leaderboardProps ) => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end"
+          justifyContent: "space-between"
         }}
       >
+        {refreshBtn}
         <Fade in={isLoaded}>
           <Typography sx={{ m: 1 }}>
             Last Refreshed: {refreshTime}
@@ -170,6 +182,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
         <Typography variant="h5">
           place with {score} points
         </Typography>
+        {refreshBtn}
       </Box>
     </Box>
   );
