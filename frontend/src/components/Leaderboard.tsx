@@ -9,7 +9,8 @@ import {
   TableRow,
   Paper,
   Box,
-  Typography
+  Typography,
+  Fade
 } from "@mui/material";
 
 import LoadingScreen from "./LoadingScreen";
@@ -17,9 +18,11 @@ import LoadingScreen from "./LoadingScreen";
 import { Context, useContext } from "../context";
 import { BACKEND_URL } from "../helpers/config";
 import prettyPrintDate from "../helpers/datehelpers";
+import getOrdinal from "../helpers/ordinal";
 
 type leaderboardProps = {
-  compId: number
+  compId: number,
+  uId: number
 }
 
 type Participant = {
@@ -35,6 +38,8 @@ type reqParams = {
   start: string
 }
 
+
+
 const Leaderboard = ( props: leaderboardProps ) => {
   const [isLoaded, setLoaded] = React.useState(false);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
@@ -42,9 +47,12 @@ const Leaderboard = ( props: leaderboardProps ) => {
   const [start, setStart] = React.useState(0);
   const [end, setEnd] = React.useState(-1);
   const [refreshTime, setRefreshTime] = React.useState("");
+  const [position, setPosition] = React.useState(-1);
+  const [score, setScore] = React.useState(-1);
 
   const context = useContext(Context);
   const getters = context.getters;
+
 
   const fetchLeaderboard = async () => {
     const params : reqParams = {
@@ -65,9 +73,18 @@ const Leaderboard = ( props: leaderboardProps ) => {
     if (response.status !== 200) {
       setBackendError(res.message);
     } else {
+      const pos = (res.leaderboard as Participant[]).findIndex(p => 
+      {return p.u_id == getters.authUserId;} 
+      ) + 1;
+        
+      console.log(pos, res.leaderboard, getters.authUserId);
+      setScore(res.leaderboard[pos - 1].score);
       setParticipants(res.leaderboard);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
-    }
+      setPosition(pos);
+      
+    } 
+
 
     setLoaded(true);
   };
@@ -84,9 +101,8 @@ const Leaderboard = ( props: leaderboardProps ) => {
     return () => clearInterval(interval);
   }, []);
 
-  return (
+  const fullLeaderboard = (
     <Box>
-      
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 350 }} aria-label="leaderboard">
           <TableHead>
@@ -119,12 +135,28 @@ const Leaderboard = ( props: leaderboardProps ) => {
           justifyContent: "flex-end"
         }}
       >
-        <Typography sx={{ m: 1 }}>
-          Last Refreshed: {refreshTime}
-        </Typography>
+        <Fade in={isLoaded}>
+          <Typography sx={{ m: 1 }}>
+            Last Refreshed: {refreshTime}
+          </Typography>
+        </Fade>
       </Box>
     </Box>
-    
+  );
+
+  return (
+    <Box>
+      <Box sx={{
+        display: { xs: "none", sm: "block" }
+      }}>
+        {fullLeaderboard}
+      </Box>
+      <Box sx={{
+        display: { xs: "block", sm: "none" }
+      }}>
+        You are in {position}{getOrdinal(position)} place with {score} points
+      </Box>
+    </Box>
   );
 };
 

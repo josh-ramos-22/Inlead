@@ -70,6 +70,10 @@ const CompetitionPage = () => {
     fetchDetails();
   }, []);
 
+  const logPointsModal = (
+    <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated}/>
+  );
+
   return (
     <FormattedPage>
       <Box
@@ -84,23 +88,37 @@ const CompetitionPage = () => {
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent:"space-between"
+                  justifyContent:"space-between",
                 }}
               >
                 <Box>
-                  <Typography variant="h4">
-                    {name}
-                  </Typography>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "15pt", sm: "30pt"},
+                      }}
+                    >
+                      {name}
+                    </Typography>
 
-                  <Typography>
-                    {description}
-                  </Typography>
+                  </Box>
 
-                  <Typography>
-                    Created {startTime}.
-                  </Typography>
+                  <Box
+                    sx={{
+                      display: { xs: "none", sm: "block"}
+                    }}
+                  >
+                    <Typography>
+                      {description}
+                    </Typography>
 
-                  <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated}/>
+                    <Typography>
+                      Created {startTime}.
+                    </Typography>
+
+                    {logPointsModal} 
+                  </Box>
+
                 </Box>
                 <Box
                   sx={{
@@ -116,7 +134,7 @@ const CompetitionPage = () => {
               <LoadingScreen/>
             )
         }
-        <Leaderboard compId={Number(compId)}/>
+        <Leaderboard compId={Number(compId)} uId={getters.authUserId}/>
 
       </Box>
 

@@ -31,6 +31,7 @@ const LogoutButton : React.FC = () => {
       alert(res.message);
     } else {
       localStorage.setItem("token", "");
+      localStorage.setItem("auth_user_id", "");
       setters?.setToken ?.("");
       setters?.setUID?.(-1);
       navigate("/login");
