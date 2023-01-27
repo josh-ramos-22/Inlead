@@ -8,7 +8,7 @@ type joinProps = {
 
 const JoinCompBox = (props : joinProps) => {
   return (
-    <Box sx={{ minWidth: 275, m: 1}}>
+    <Box sx={{ minWidth: 275, m: 1, boxShadow: 3}}>
       <Card variant="outlined">
         <CardContent
           sx={{
