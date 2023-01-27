@@ -89,10 +89,20 @@ const CompetitionPage = () => {
                 sx={{
                   display: "flex",
                   justifyContent:"space-between",
+                  width: "100%"
                 }}
               >
-                <Box>
-                  <Box>
+                <Box
+                  sx={{
+                    width: "100%"
+                  }}
+                >
+                  <Box id="foo"
+                    sx={{
+                      width: "100%",
+                      textAlign: { xs: "right", sm: "left"}
+                    }}
+                  >
                     <Typography
                       sx={{
                         fontSize: { xs: "15pt", sm: "30pt"},
@@ -127,6 +137,7 @@ const CompetitionPage = () => {
                 >
                   <JoinCompBox compId={Number(compId)}/>
                 </Box>
+                
               </Box>
             )
             :
@@ -135,7 +146,12 @@ const CompetitionPage = () => {
             )
         }
         <Leaderboard compId={Number(compId)} uId={getters.authUserId}/>
-
+        <Box sx={{
+          display: { xs: "flex", sm: "none" },
+          justifyContent: "center"
+        }}>
+          {logPointsModal}
+        </Box>
       </Box>
 
     </FormattedPage>
