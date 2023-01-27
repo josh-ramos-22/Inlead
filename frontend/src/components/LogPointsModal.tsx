@@ -27,6 +27,7 @@ type modalProps = {
   compId: number,
   maxPointsPerLog: number,
   isPointsModerated: boolean,
+  setMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
 type inputData = {
@@ -74,6 +75,11 @@ const LogPointsModal = ( props: modalProps ) => {
     if (response.status !== 200) {
       setBackendError(res.message);
     } else {
+      if (res.request_id !== -1) {
+        props.setMessage("Your points will appear once a moderator has approved your request");
+      } else {
+        props.setMessage("Your points will appear on the leaderboard shortly.");
+      }
       handleClose();
     }
   };

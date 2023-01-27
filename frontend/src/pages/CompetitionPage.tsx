@@ -14,6 +14,7 @@ import LoadingScreen from "../components/LoadingScreen";
 import JoinCompBox from "../components/JoinCompBox";
 import Leaderboard from "../components/Leaderboard";
 import LogPointsModal from "../components/LogPointsModal";
+import SuccessMessageBox from "../components/SuccessMessageBox";
 
 type detailParams = {
   comp_id : string,
@@ -26,6 +27,7 @@ const CompetitionPage = () => {
   const getters = context.getters;
 
   const [backendError, setBackendError] = React.useState("");
+  const [joinSuccessMessage, setJoinSuccessMessage] = React.useState("");
 
   const [isDetailsLoaded, setDetailsLoaded] = React.useState(false);
 
@@ -71,7 +73,7 @@ const CompetitionPage = () => {
   }, []);
 
   const logPointsModal = (
-    <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated}/>
+    <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated} setMessage={setJoinSuccessMessage}/>
   );
 
   return (
@@ -92,12 +94,13 @@ const CompetitionPage = () => {
                   width: "100%"
                 }}
               >
+                <SuccessMessageBox message={joinSuccessMessage} setMessage={setJoinSuccessMessage}/>
                 <Box
                   sx={{
                     width: "100%"
                   }}
                 >
-                  <Box id="foo"
+                  <Box
                     sx={{
                       width: "100%",
                       textAlign: { xs: "right", sm: "left"}
@@ -135,7 +138,7 @@ const CompetitionPage = () => {
                     display: { xs: "none", sm: "block" }
                   }}
                 >
-                  <JoinCompBox compId={Number(compId)}/>
+                  <JoinCompBox compId={Number(compId)} />
                 </Box>
                 
               </Box>

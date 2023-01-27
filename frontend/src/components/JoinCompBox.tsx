@@ -3,7 +3,7 @@ import React from "react";
 import { Card, Typography, CardContent, Box } from "@mui/material";
 
 type joinProps = {
-  compId: number
+  compId: number,
 }
 
 const JoinCompBox = (props : joinProps) => {
