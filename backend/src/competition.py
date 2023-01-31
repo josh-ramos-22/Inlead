@@ -294,7 +294,7 @@ def leaderboard(auth_user_id, comp_id, start):
                 JOIN     CompetitionParticipants cp ON (p.id = cp.player)
                 WHERE    cp.competition = %s
                 ORDER BY cp.score DESC
-                LIMIT    10
+                LIMIT    11
                 OFFSET   %s
                 ;
             """
@@ -311,10 +311,11 @@ def leaderboard(auth_user_id, comp_id, start):
 
             if len(ret) == 0:
                 raise InputError("Start is greater than number of participants")
-            elif len(ret) < 10:
+            elif len(ret) <= 10:
                 end = -1
             else:
                 end = start + 10
+                ret = ret[:-1]
                 
             return {
                 'leaderboard' : ret,
