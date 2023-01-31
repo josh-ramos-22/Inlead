@@ -11,8 +11,13 @@ import {
   Box,
   Typography,
   Fade,
-  Button
+  Button,
+  ButtonGroup,
+  IconButton
 } from "@mui/material";
+
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 
 import LoadingScreen from "./LoadingScreen";
 
@@ -56,6 +61,8 @@ const Leaderboard = ( props: leaderboardProps ) => {
 
 
   const fetchLeaderboard = async () => {
+
+    console.log(start, end);
     const params : reqParams = {
       token: getters.token,
       comp_id: String(props.compId),
@@ -73,13 +80,15 @@ const Leaderboard = ( props: leaderboardProps ) => {
     const res = await response.json();
     if (response.status !== 200) {
       setBackendError(res.message);
+      setEnd(-1);
     } else {
       const pos = (res.leaderboard as Participant[]).findIndex(p => 
       {return p.u_id == getters.authUserId;} 
       ) + 1;
 
-      setScore(res.leaderboard[pos - 1].score);
+      // setScore(res.leaderboard[pos - 1].score);
       setParticipants(res.leaderboard);
+      setEnd(res.end);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
       setPosition(pos);
       
@@ -95,7 +104,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
 
   React.useEffect(() => {
     fetchLeaderboard();
-  }, [isLoaded]);
+  }, [isLoaded, start]);
   
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -128,10 +137,10 @@ const Leaderboard = ( props: leaderboardProps ) => {
                 key={p.u_id}
                 sx={{ 
                   "&:last-child td, &:last-child th": { border: 0 }, 
-                  fontSize: "15pt" 
+                  fontSize: "12pt" 
                 }}
               >
-                <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{i + 1}</TableCell>
+                <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{start + i + 1}</TableCell>
                 <TableCell sx={{ fontSize: "inherit" }}>{p.username}</TableCell>
                 <TableCell sx={{ fontSize: "inherit" }}>{p.score}</TableCell>
               </TableRow>
@@ -146,6 +155,25 @@ const Leaderboard = ( props: leaderboardProps ) => {
         }}
       >
         {refreshBtn}
+
+        <ButtonGroup
+          sx={{
+            m: 1
+          }}
+        >
+          <Button
+            disabled={start === 0}
+            onClick={() => setStart(start - 10)}
+          > 
+            Prev
+          </Button>
+          <Button
+            disabled={end === -1}
+            onClick={() => setStart(start + 10)}
+          >
+            Next
+          </Button>
+        </ButtonGroup>
         <Fade in={isLoaded}>
           <Typography sx={{ m: 1 }}>
             Last Refreshed: {refreshTime}

@@ -24,7 +24,7 @@ def test_own_comp_appears(clear, sample_comp1):
     assert len(competitions) == 1
     
     for key in competitions[0]:
-        assert key in ['name', 'comp_id', 'is_active']
+        assert key in ['name', 'comp_id', 'is_active', 'start_time']
 
 def test_non_member_cant_see_comp(clear, sample_comp1, register_user2):
     token = register_user2['token']
