@@ -27,7 +27,8 @@ import { Context, useContext } from "../context";
 import { BACKEND_URL } from "../helpers/config";
 import prettyPrintDate from "../helpers/datehelpers";
 import getOrdinal from "../helpers/ordinal";
-import { Done } from "@mui/icons-material";
+import { AddBoxRounded, Done } from "@mui/icons-material";
+import { red } from "@mui/material/colors";
 
 type leaderboardProps = {
   compId: number,
@@ -57,8 +58,6 @@ const PointsRequestList = ( props: leaderboardProps ) => {
   const [participants, setParticipants] = React.useState<Participant[]>([]);
   const [requests, setRequests] = React.useState<Request[]>([]);
   const [backendError, setBackendError] = React.useState("");
-  const [start, setStart] = React.useState(0);
-  const [end, setEnd] = React.useState(-1);
   const [refreshTime, setRefreshTime] = React.useState("");
 
   const context = useContext(Context);
@@ -125,7 +124,6 @@ const PointsRequestList = ( props: leaderboardProps ) => {
     const res = await response.json();
     if (response.status !== 200) {
       setBackendError(res.message);
-      setEnd(-1);
     } else {
       setRequests(res.requests);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
@@ -231,12 +229,26 @@ const PointsRequestList = ( props: leaderboardProps ) => {
     >
       { 
         isLoaded ?
-          <>
-            <Box sx={{
-            }}>
+          requests.length !== 0 ?
+            <Box>
               {requestList}
             </Box>
-          </>
+            :
+            <Paper
+              sx={{
+                p: 1,
+                borderRadius: 1
+              }}
+            >
+              <Typography
+                sx={{
+                  m: 1,
+                  fontStyle: "italic"
+                }}
+              >
+                No points requests yet. Check back later.
+              </Typography>
+            </Paper>
           :
           <LoadingScreen/>
       }

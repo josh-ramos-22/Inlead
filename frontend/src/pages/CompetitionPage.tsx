@@ -75,6 +75,10 @@ const CompetitionPage = () => {
     fetchDetails();
   }, []);
 
+  React.useEffect(() => {
+    fetchDetails();
+  }, [isDetailsLoaded]);
+
   const logPointsModal = (
     <LogPointsModal compId={Number(compId)} maxPointsPerLog={maxPointsPerLog} isPointsModerated={isPointsModerated} setMessage={setJoinSuccessMessage}/>
   );
@@ -146,7 +150,7 @@ const CompetitionPage = () => {
                       >
                         {logPointsModal}
                         {isMod &&
-                          <CompetitionManagementModal compId={Number(compId)}isPointsModerated={isPointsModerated}/>
+                          <CompetitionManagementModal compId={Number(compId)}isPointsModerated={isPointsModerated} setLoaded={setDetailsLoaded}/>
                         }
                       </Box>
                     )

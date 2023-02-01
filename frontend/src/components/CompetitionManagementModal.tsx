@@ -25,10 +25,7 @@ import PointsRequestList from "./PointsRequestList";
 type modalProps = {
   compId: number,
   isPointsModerated: boolean,
-}
-
-type inputData = {
-  points: number
+  setLoaded: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CompetitionManagementModal = ( props: modalProps ) => {
@@ -47,9 +44,9 @@ const CompetitionManagementModal = ( props: modalProps ) => {
     setEndStaged(false);
   };
 
-  const doEndComp = async (data : inputData) => {
+  const doEndComp = async () => {
     const response = await fetch(
-      `${BACKEND_URL}/points/log/v1`, {
+      `${BACKEND_URL}/competition/end/v1`, {
         method: "POST",
         headers: {
           "Content-type" : "application/json"
@@ -57,7 +54,6 @@ const CompetitionManagementModal = ( props: modalProps ) => {
         body: JSON.stringify({
           token: getters.token,
           comp_id: props.compId,
-          points: data.points
         })
       }
     );
@@ -66,6 +62,7 @@ const CompetitionManagementModal = ( props: modalProps ) => {
     if (response.status !== 200) {
       setBackendError(res.message);
     } else {
+      props.setLoaded(false);
       handleClose();
     }
   };
@@ -114,7 +111,7 @@ const CompetitionManagementModal = ( props: modalProps ) => {
                   <Button onClick={() => setEndStaged(false)}>
                     Cancel
                   </Button>
-                  <Button variant="contained" onClick={() => setEndStaged(false)}>
+                  <Button variant="contained" onClick={() => doEndComp()}>
                     End
                   </Button>
                 </Box>
