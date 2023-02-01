@@ -16,16 +16,11 @@ import {
 import { red } from "@mui/material/colors";
 
 
-import {
-  Formik,
-  Form,
-} from "formik";
-
-import * as yup from "yup";
 import { BACKEND_URL } from "../helpers/config";
 
 import { Context, useContext } from "../context";
 import ErrorMessageBox from "./ErrorMessageBox";
+import PointsRequestList from "./PointsRequestList";
 
 type modalProps = {
   compId: number,
@@ -127,12 +122,18 @@ const CompetitionManagementModal = ( props: modalProps ) => {
             )
           }
 
-          <Typography sx={{
-            mb: 1,
-            mt: 1
-          }}>
-            Points Requests
-          </Typography>
+          {props.isPointsModerated && 
+            <Box>
+              <Typography sx={{
+                mb: 1,
+                mt: 1
+              }}>
+                Points Requests
+              </Typography>
+              
+              <PointsRequestList compId={props.compId}/>
+            </Box>
+          }
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
