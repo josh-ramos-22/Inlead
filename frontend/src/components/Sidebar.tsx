@@ -57,7 +57,7 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <AddCircleOutlineIcon/>
             </ListItemIcon>
-            <ListItemText primary="Join Game" />
+            <ListItemText primary="Join Comp" />
           </ListItemButton>
         </ListItem>
 
@@ -66,7 +66,7 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <CreateIcon/>
             </ListItemIcon>
-            <ListItemText primary="Create Game" />
+            <ListItemText primary="Create Comp" />
           </ListItemButton>
         </ListItem>
 
@@ -79,18 +79,18 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <LibraryBooksIcon/>
             </ListItemIcon>
-            <ListItemText primary="All Games" />
+            <ListItemText primary="Your Comps" />
           </ListItemButton>
         </ListItem>
 
-        <ListItem key="completed-link" disablePadding>
+        {/* <ListItem key="completed-link" disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <HistoryIcon/>
             </ListItemIcon>
             <ListItemText primary="Completed Games" />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
       </List>
     </Box>
   );
