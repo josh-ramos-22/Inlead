@@ -15,7 +15,7 @@ import json
 from flask import Flask, request, send_from_directory
 from flask_cors import CORS
 
-from src import config, auth, other, competition, points
+from src import config, auth, other, competition, points, sec
 
 def quit_gracefully(*args):
     exit(0)
@@ -161,6 +161,12 @@ def points_request_list():
 @APP.route("/clear/v1", methods=['DELETE'])
 def clear():
     ret = other.clear()
+    return json.dumps(ret)
+
+@APP.route("/sec/validate_token/v1", methods=['GET'])
+def validate_token():
+    token = request.args.get('token')
+    ret = sec.validate_token(token)
     return json.dumps(ret)
 
 

@@ -175,7 +175,7 @@ const CompetitionPage = () => {
               <LoadingScreen/>
             )
         }
-        <Leaderboard compId={Number(compId)} uId={getters.authUserId}/>
+        <Leaderboard compId={Number(compId)} uId={getters.authUserId} isActive={isActive}/>
         <Box sx={{
           display: { xs: "flex", sm: "none" },
           justifyContent: "center"

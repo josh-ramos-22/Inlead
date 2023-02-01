@@ -19,6 +19,8 @@ import {
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 
+import { red } from "@mui/material/colors";
+
 import LoadingScreen from "./LoadingScreen";
 
 import { Context, useContext } from "../context";
@@ -28,7 +30,8 @@ import getOrdinal from "../helpers/ordinal";
 
 type leaderboardProps = {
   compId: number,
-  uId: number
+  uId: number,
+  isActive: boolean
 }
 
 type Participant = {
@@ -129,13 +132,13 @@ const Leaderboard = ( props: leaderboardProps ) => {
   };
 
   React.useEffect(() => {
-    fetchLeaderboard();
     fetchRank();
+    fetchLeaderboard();
   }, []);
 
   React.useEffect(() => {
-    fetchLeaderboard();
     fetchRank();
+    fetchLeaderboard();
   }, [isLoaded, start]);
   
   React.useEffect(() => {
@@ -170,7 +173,8 @@ const Leaderboard = ( props: leaderboardProps ) => {
                 key={p.u_id}
                 sx={{ 
                   "&:last-child td, &:last-child th": { border: 0 }, 
-                  fontSize: "12pt" 
+                  fontSize: "12pt" ,
+                  // backgroundColor: p.u_id === props.uId ? red[50] : "#FFF"
                 }}
               >
                 <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{start + i + 1}</TableCell>
@@ -238,7 +242,11 @@ const Leaderboard = ( props: leaderboardProps ) => {
               alignItems: "center",
             }}>
               <Typography variant="h5">
-                You are in
+                {props.isActive ?
+                  "You are in"
+                  :
+                  "You finished in"
+                }
               </Typography>
               <Typography variant="h1">
                 {position}{getOrdinal(position)}
