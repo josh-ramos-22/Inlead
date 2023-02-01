@@ -54,15 +54,13 @@ const Leaderboard = ( props: leaderboardProps ) => {
   const [end, setEnd] = React.useState(-1);
   const [refreshTime, setRefreshTime] = React.useState("");
   const [position, setPosition] = React.useState(-1);
-  const [score, setScore] = React.useState(-1);
+  const [score, setScore] = React.useState(0);
 
   const context = useContext(Context);
   const getters = context.getters;
 
 
   const fetchLeaderboard = async () => {
-
-    console.log(start, end);
     const params : reqParams = {
       token: getters.token,
       comp_id: String(props.compId),
@@ -86,7 +84,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
       {return p.u_id == getters.authUserId;} 
       ) + 1;
 
-      // setScore(res.leaderboard[pos - 1].score);
+      setScore(res.leaderboard[pos - 1].score);
       setParticipants(res.leaderboard);
       setEnd(res.end);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
