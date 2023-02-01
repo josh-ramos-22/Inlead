@@ -6,7 +6,8 @@ import {
   CardContent,
   CardActions,
   Typography,
-  Button
+  Button,
+  Chip
 } from "@mui/material";
 
 import prettyPrintDate from "../helpers/datehelpers";
@@ -33,13 +34,27 @@ const CompetitionLink = (props : compProps) => {
           <Typography variant="h6">
             {comp.name}
           </Typography>
-          <Typography
-            sx= {{
-              fontSize: "10pt"
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around"
             }}
           >
-            Created {prettyPrintDate(comp.start_time)}
-          </Typography>
+            <Typography
+              sx= {{
+                fontSize: "10pt",
+                mt: 1
+              }}
+            >
+              Created {prettyPrintDate(comp.start_time)}
+            </Typography>
+            {
+              props.comp.is_active ?
+                <Chip label="Inactive"/>
+                :
+                <Chip label="Active" color="success"/>
+            }
+          </Box>
         </CardContent>
         <CardActions
           sx={{
