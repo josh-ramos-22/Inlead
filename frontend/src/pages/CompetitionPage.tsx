@@ -15,6 +15,7 @@ import JoinCompBox from "../components/JoinCompBox";
 import Leaderboard from "../components/Leaderboard";
 import LogPointsModal from "../components/LogPointsModal";
 import SuccessMessageBox from "../components/SuccessMessageBox";
+import CompetitionManagementModal from "../components/CompetitionManagementModal";
 
 type detailParams = {
   comp_id : string,
@@ -38,6 +39,7 @@ const CompetitionPage = () => {
   const [maxPointsPerLog, setMaxPointsPerLog] = React.useState(1);
   const [isActive, setActive] = React.useState(true);
   const [isPointsModerated, setIsPointsModerated] = React.useState(false);
+  const [isMod, setIsMod] = React.useState(false);
 
   const fetchDetails = async () => {
     const params : detailParams = {
@@ -60,10 +62,11 @@ const CompetitionPage = () => {
       setName(res.name);
       setDescription(res.description);
       setStartTime(prettyPrintDate(res.start_time));
-      setEndTime(res.end_time);
+      setEndTime(prettyPrintDate(res.end_time));
       setMaxPointsPerLog(res.max_points_per_log);
       setActive(res.is_active);
       setIsPointsModerated(res.is_points_moderated);
+      setIsMod(res.is_moderator);
     }
     setDetailsLoaded(true);
   };
@@ -126,20 +129,40 @@ const CompetitionPage = () => {
                     </Typography>
 
                     <Typography>
-                      Created {startTime}.
+                      Started {startTime}.
                     </Typography>
+                    {
+                      !isActive && 
+                        <Typography>
+                          Ended {endTime}
+                        </Typography>
+                    }
 
-                    {logPointsModal} 
+                    {isActive && (
+                      <Box
+                        sx={{
+                          display: "flex"
+                        }}
+                      >
+                        {logPointsModal}
+                        {isMod &&
+                          <CompetitionManagementModal compId={Number(compId)}isPointsModerated={isPointsModerated}/>
+                        }
+                      </Box>
+                    )
+                    } 
                   </Box>
 
                 </Box>
-                <Box
-                  sx={{
-                    display: { xs: "none", sm: "block" }
-                  }}
-                >
-                  <JoinCompBox compId={Number(compId)} />
-                </Box>
+                {isActive && (
+                  <Box
+                    sx={{
+                      display: { xs: "none", sm: "block" }
+                    }}
+                  >
+                    <JoinCompBox compId={Number(compId)} />
+                  </Box>
+                )}
                 
               </Box>
             )
@@ -153,7 +176,7 @@ const CompetitionPage = () => {
           display: { xs: "flex", sm: "none" },
           justifyContent: "center"
         }}>
-          {logPointsModal}
+          {isActive && logPointsModal}
         </Box>
       </Box>
 

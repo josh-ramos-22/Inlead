@@ -105,7 +105,7 @@ def details(auth_user_id, comp_id):
     with database.get_conn() as conn:
         with conn.cursor() as cur:
             qry = """
-                SELECT c.id, c.name, c.start_time, c.end_time, c.owner, c.max_points_per_log, c.is_points_moderated, c.description
+                SELECT c.id, c.name, c.start_time, c.end_time, c.owner, c.max_points_per_log, c.is_points_moderated, c.description, cp.is_moderator
                 FROM   Competitions c
                 JOIN   CompetitionParticipants cp ON (c.id = cp.competition)
                 WHERE  c.id = %s
@@ -123,7 +123,7 @@ def details(auth_user_id, comp_id):
                 
                 raise InputError("Invalid Competition")
             
-            comp_id, name, start_time, end_time, owner, max_points_per_log, is_points_moderated, description = result
+            comp_id, name, start_time, end_time, owner, max_points_per_log, is_points_moderated, description, is_moderator = result
             
             return {
                 'comp_id'            : comp_id,
@@ -134,7 +134,8 @@ def details(auth_user_id, comp_id):
                 'owner'              : owner,
                 'max_points_per_log' : max_points_per_log,
                 'is_points_moderated': is_points_moderated,
-                'description'        : description
+                'description'        : description,
+                'is_moderator'       : is_moderator
             }
 
 '''
