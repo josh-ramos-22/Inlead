@@ -57,7 +57,7 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <AddCircleOutlineIcon/>
             </ListItemIcon>
-            <ListItemText primary="Join Comp" />
+            <ListItemText primary="Join Competition" />
           </ListItemButton>
         </ListItem>
 
@@ -66,7 +66,7 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <CreateIcon/>
             </ListItemIcon>
-            <ListItemText primary="Create Comp" />
+            <ListItemText primary="Create Competition" />
           </ListItemButton>
         </ListItem>
 
@@ -79,7 +79,7 @@ const Sidebar = (props : Props)  => {
             <ListItemIcon>
               <LibraryBooksIcon/>
             </ListItemIcon>
-            <ListItemText primary="Your Comps" />
+            <ListItemText primary="Your Competitions" />
           </ListItemButton>
         </ListItem>
 
