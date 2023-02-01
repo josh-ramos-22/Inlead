@@ -204,6 +204,8 @@ def approve(auth_user_id, request_id):
             cur.execute(qry, qry_params)
             
             conn.commit()
+
+    delete_request(request_id)
     
     return {}
 '''
