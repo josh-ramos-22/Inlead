@@ -27,7 +27,7 @@ function AppEntryBox(props : {children: React.ReactNode}) {
           alignItems: "center",
           backgroundColor: "white",
           width: { xs: "100vw", sm: "400px"},
-          height: { xs: "100vh", sm: "75%"},
+          minHeight: { xs: "100vh", sm: "75%"},
           borderRadius: { xs: 0, sm: 3},
           justifyContent: "center",
           boxShadow: "2px 2px 2px 5px rgba(0, 0, 0, 0.2)"
