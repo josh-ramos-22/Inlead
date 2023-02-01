@@ -60,6 +60,45 @@ const Leaderboard = ( props: leaderboardProps ) => {
   const getters = context.getters;
 
 
+  const fetchRank = async () => {
+    let start_ = 0;
+
+    while (start_ !== -1) {
+      const params : reqParams = {
+        token: getters.token,
+        comp_id: String(props.compId),
+        start: String(start_)
+      };
+      const response = await fetch(
+        `${BACKEND_URL}/competition/leaderboard/v1?` + ( new URLSearchParams(params) ), {
+          method: "GET",
+          headers: {
+            "Content-type" : "application/json"
+          }
+        }
+      );
+    
+      const res = await response.json();
+      if (response.status !== 200) {
+        setBackendError(res.message);
+        setEnd(-1);
+      } else {
+        const pos = (res.leaderboard as Participant[]).findIndex(p => 
+        {return p.u_id == getters.authUserId;} 
+        );
+
+        if (pos === -1) {
+          start_ = res.end;
+        } else {
+          setPosition(start + pos + 1);
+          setScore(res.leaderboard[pos].score);
+          break;
+        }
+        
+      } 
+    }
+  };
+
   const fetchLeaderboard = async () => {
     const params : reqParams = {
       token: getters.token,
@@ -80,16 +119,9 @@ const Leaderboard = ( props: leaderboardProps ) => {
       setBackendError(res.message);
       setEnd(-1);
     } else {
-      const pos = (res.leaderboard as Participant[]).findIndex(p => 
-      {return p.u_id == getters.authUserId;} 
-      ) + 1;
-
-      setScore(res.leaderboard[pos - 1].score);
       setParticipants(res.leaderboard);
       setEnd(res.end);
       setRefreshTime(prettyPrintDate((new Date()).toISOString()));
-      setPosition(pos);
-      
     } 
 
 
@@ -98,15 +130,18 @@ const Leaderboard = ( props: leaderboardProps ) => {
 
   React.useEffect(() => {
     fetchLeaderboard();
+    fetchRank();
   }, []);
 
   React.useEffect(() => {
     fetchLeaderboard();
+    fetchRank();
   }, [isLoaded, start]);
   
   React.useEffect(() => {
     const interval = setInterval(() => {
       fetchLeaderboard();
+      fetchRank();
     }, 30000);
 
     return () => clearInterval(interval);
@@ -187,29 +222,36 @@ const Leaderboard = ( props: leaderboardProps ) => {
         m: 2
       }}
     >
-      <Box sx={{
-        display: { xs: "none", sm: "block" }
-      }}>
-        {fullLeaderboard}
-      </Box>
-      <Box sx={{
-        display: { xs: "flex", sm: "none" },
-        justifyContent: "center",
-        textAlign: "center",
-        flexDirection: "column",
-        alignItems: "center",
-      }}>
-        <Typography variant="h5">
-          You are in
-        </Typography>
-        <Typography variant="h1">
-          {position}{getOrdinal(position)}
-        </Typography>
-        <Typography variant="h5">
-          place with {score} points
-        </Typography>
-        {refreshBtn}
-      </Box>
+      { 
+        isLoaded ?
+          <>
+            <Box sx={{
+              display: { xs: "none", sm: "block" }
+            }}>
+              {fullLeaderboard}
+            </Box>
+            <Box sx={{
+              display: { xs: "flex", sm: "none" },
+              justifyContent: "center",
+              textAlign: "center",
+              flexDirection: "column",
+              alignItems: "center",
+            }}>
+              <Typography variant="h5">
+                You are in
+              </Typography>
+              <Typography variant="h1">
+                {position}{getOrdinal(position)}
+              </Typography>
+              <Typography variant="h5">
+                place with {score} point{score === 1 ? "": "s"}
+              </Typography>
+              {refreshBtn}
+            </Box>
+          </>
+          :
+          <LoadingScreen/>
+      }
     </Box>
   );
 };

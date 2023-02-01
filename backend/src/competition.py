@@ -293,7 +293,7 @@ def leaderboard(auth_user_id, comp_id, start):
                 FROM     Players p
                 JOIN     CompetitionParticipants cp ON (p.id = cp.player)
                 WHERE    cp.competition = %s
-                ORDER BY cp.score DESC
+                ORDER BY cp.score DESC, p.username
                 LIMIT    11
                 OFFSET   %s
                 ;
