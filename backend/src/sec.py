@@ -113,8 +113,7 @@ def authorise(func):
     def wrapper(*args, **kwargs):
         token = args[0]
         auth_user_id = get_u_id(token)
-        
-        ## FIXME How to convert token into user id?s
+
         return func(auth_user_id, *args[1:], **kwargs)
         
     return wrapper
