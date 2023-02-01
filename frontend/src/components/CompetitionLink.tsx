@@ -50,9 +50,9 @@ const CompetitionLink = (props : compProps) => {
             </Typography>
             {
               props.comp.is_active ?
-                <Chip label="Inactive"/>
+                <Chip label="Inactive" size="small" sx={{ m: 1 }}/>
                 :
-                <Chip label="Active" color="success"/>
+                <Chip label="Active" color="success" size="small" sx={{ m: 1 }}/>
             }
           </Box>
         </CardContent>
