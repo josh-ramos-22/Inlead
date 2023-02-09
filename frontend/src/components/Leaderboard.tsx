@@ -32,6 +32,7 @@ type leaderboardProps = {
 }
 
 type Participant = {
+  rank: number;
   u_id: number,
   username: string,
   score: number,
@@ -90,7 +91,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
         if (pos === -1) {
           start_ = res.end;
         } else {
-          setPosition(start + pos + 1);
+          setPosition(res.leaderboard[pos].rank);
           setScore(res.leaderboard[pos].score);
           break;
         }
@@ -165,7 +166,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map((p, i) => (
+            {participants.map((p) => (
               <TableRow
                 key={p.u_id}
                 sx={{ 
@@ -173,7 +174,7 @@ const Leaderboard = ( props: leaderboardProps ) => {
                   fontSize: "12pt" 
                 }}
               >
-                <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{start + i + 1}</TableCell>
+                <TableCell component="th" scope="row" sx={{ fontSize: "inherit" }}>{p.rank}</TableCell>
                 <TableCell sx={{ fontSize: "inherit" }}>{p.username}</TableCell>
                 <TableCell sx={{ fontSize: "inherit" }}>{p.score}</TableCell>
               </TableRow>

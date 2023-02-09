@@ -290,7 +290,10 @@ def leaderboard(auth_user_id, comp_id, start):
             
             
             qry2 = """
-                SELECT   p.id, p.username, cp.score, cp.is_moderator
+                SELECT   p.id, p.username, cp.score, cp.is_moderator,
+                         RANK() OVER (
+                             ORDER BY cp.score DESC
+                         ) rank
                 FROM     Players p
                 JOIN     CompetitionParticipants cp ON (p.id = cp.player)
                 WHERE    cp.competition = %s
@@ -307,8 +310,9 @@ def leaderboard(auth_user_id, comp_id, start):
                 'u_id'         : u_id,
                 'username'     : username,
                 'score'        : score,
-                'is_moderator' : is_moderator
-            } for u_id, username, score, is_moderator in cur.fetchall()]
+                'is_moderator' : is_moderator,
+                'rank'         : rank
+            } for u_id, username, score, is_moderator, rank in cur.fetchall()]
 
             if len(ret) == 0:
                 raise InputError("Start is greater than number of participants")
